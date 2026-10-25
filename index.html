@@ -1,572 +1,857 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BioAcreon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--font-sans);color:#19322d;background:#f6f8f4}
-.app{min-height:100vh;background:#f6f8f4}
-.topbar{background:#fff;color:#173b35;padding:0 56px;display:flex;align-items:center;justify-content:space-between;height:88px;position:sticky;top:0;z-index:10;box-shadow:0 2px 18px rgba(12,54,45,0.12)}
-.logo{display:flex;align-items:center;gap:10px;font-family:Georgia,serif;font-weight:700;font-size:34px;letter-spacing:0.01em;color:#0b5b4e;white-space:nowrap}
-.logo-icon{display:none}
-.nav{display:flex;gap:28px;align-items:center}
-.nav-btn{background:none;border:none;cursor:pointer;padding:8px 0;border-radius:0;font-size:13px;color:#173b35;font-family:var(--font-sans);font-weight:800;text-transform:uppercase;letter-spacing:0.04em}
-.nav-btn.active,.nav-btn:hover{background:none;color:#0b7d66;text-decoration:underline;text-underline-offset:6px}
-.content{padding:0;max-width:none;margin:0}
-.page{display:none}.page.active{display:block}
-.page:not(#page-dashboard){max-width:900px;margin:0 auto;padding:24px}
-#page-dashboard > :not(.hero){max-width:900px;margin-left:auto;margin-right:auto}
-.hero{min-height:calc(100vh - 88px);background:linear-gradient(90deg,rgba(4,54,48,0.82),rgba(4,54,48,0.52),rgba(4,54,48,0.16)),url('bioacreon-greenhouse-bg.png') center/cover no-repeat;border-radius:0;padding:18vh 56px 56px;color:#fff;margin-bottom:0;position:relative;overflow:hidden;text-align:left;display:flex;flex-direction:column;align-items:flex-start;justify-content:center}
-.hero h1{font-size:clamp(18px,2vw,24px);line-height:1;font-weight:800;margin-bottom:22px;color:#98e2c5;text-transform:uppercase;letter-spacing:0.16em}
-.hero p{font-size:clamp(52px,7vw,104px);font-weight:800;opacity:1;max-width:850px;line-height:0.98;color:#fff;margin-bottom:26px}
-.hero-badge{display:grid;grid-template-columns:1fr 1fr;width:min(980px,90vw);border:1px solid rgba(255,255,255,0.85);background:rgba(48,55,25,0.75);margin-top:6px}
-.hero-badge button{min-height:150px;background:transparent;color:#fff;border:0;border-right:1px solid rgba(255,255,255,0.85);font-size:clamp(34px,4vw,58px);font-weight:800;cursor:pointer;font-family:var(--font-sans)}
-.hero-badge button:last-child{border-right:0}
-.hero-badge span{display:block;font-size:18px;text-transform:uppercase;letter-spacing:0.04em;margin-top:22px;font-weight:700}
-.hero-badge{display:none}
-.hero-actions{display:flex;gap:14px;width:auto;border:0;background:transparent;margin-top:12px}
-.hero-actions button{min-height:auto;background:#fff;color:#0d594d;border:0;border-radius:4px;padding:16px 24px;font-size:15px;font-weight:800;cursor:pointer;font-family:var(--font-sans);text-transform:uppercase;letter-spacing:0.05em;box-shadow:0 12px 28px rgba(0,0,0,0.18)}
-.hero-actions button:last-child{border:1px solid rgba(255,255,255,0.8);background:rgba(255,255,255,0.12);color:#fff}
-.hero-actions span{display:none}
-.hero-art{display:none}
-.hero-subcopy{max-width:700px;color:#e8fff4;font-size:20px;line-height:1.5;margin-bottom:10px}
-.corp-band{max-width:none!important;background:#fff;padding:60px 56px;margin:0!important;border-bottom:1px solid #dfe8df}
-.corp-inner{max-width:1180px;margin:0 auto}
-.corp-eyebrow{font-size:12px;font-weight:800;color:#0b7d66;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:14px}
-.corp-title{font-size:clamp(32px,4vw,56px);line-height:1.05;color:#19322d;font-weight:800;max-width:840px;margin-bottom:18px}
-.corp-copy{font-size:18px;line-height:1.65;color:#536862;max-width:760px}
-.solution-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:34px}
-.solution-card{background:#f6f8f4;border:1px solid #dfe8df;border-radius:4px;padding:28px;min-height:210px}
-.solution-card .num{font-size:13px;color:#0b7d66;font-weight:800;margin-bottom:18px}
-.solution-card h3{font-size:24px;color:#19322d;margin-bottom:12px}
-.solution-card p{font-size:15px;line-height:1.55;color:#536862}
-.impact-strip{max-width:none!important;background:#0b3f37;color:#fff;margin:0!important;padding:44px 56px}
-.impact-grid{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
-.impact-item strong{display:block;font-size:34px;margin-bottom:8px;color:#b9f2ca}
-.impact-item span{font-size:13px;text-transform:uppercase;letter-spacing:0.08em;color:#e8fff4}
-.dashboard-tools{max-width:900px;margin:24px auto!important}
-.section-label{font-size:11px;font-weight:500;color:var(--color-text-secondary);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:12px}
-.metric-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
-.metric{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:1rem;text-align:center}
-.metric .val{font-size:22px;font-weight:500;color:var(--color-text-primary)}
-.metric .lbl{font-size:12px;color:var(--color-text-secondary);margin-top:4px}
-.metric .chg{font-size:11px;color:#1D9E75;margin-top:2px}
-.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:20px;margin-bottom:16px}
-.card-title{font-size:15px;font-weight:500;margin-bottom:16px;display:flex;align-items:center;gap:8px}
-.crop-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
-.crop-card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:16px;background:var(--color-background-primary);cursor:pointer;transition:border-color 0.15s}
-.crop-card:hover{border-color:var(--color-border-primary)}
-.crop-card.selected{border:1.5px solid #1D9E75}
-.crop-icon{font-size:28px;margin-bottom:8px}
-.crop-name{font-size:14px;font-weight:500;margin-bottom:4px}
-.crop-rev{font-size:20px;font-weight:500;color:#1D9E75}
-.crop-meta{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
-.badge{display:inline-block;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:500;margin-top:6px}
-.badge-green{background:#E1F5EE;color:#0F6E56}
-.badge-amber{background:#FAEEDA;color:#854F0B}
-.badge-blue{background:#E6F1FB;color:#185FA5}
-.progress-bar{height:6px;background:var(--color-background-secondary);border-radius:99px;margin:6px 0;overflow:hidden}
-.progress-fill{height:100%;border-radius:99px;background:#1D9E75}
-.timeline{display:flex;flex-direction:column;gap:0}
-.tl-item{display:flex;gap:16px;padding:12px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
-.tl-item:last-child{border-bottom:none}
-.tl-month{font-size:12px;font-weight:500;color:var(--color-text-secondary);width:60px;flex-shrink:0;padding-top:2px}
-.tl-dot{width:8px;height:8px;border-radius:50%;background:#1D9E75;margin-top:6px;flex-shrink:0}
-.tl-body{flex:1}
-.tl-title{font-size:14px;font-weight:500}
-.tl-desc{font-size:12px;color:var(--color-text-secondary);margin-top:2px}
-.cost-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:14px}
-.cost-row:last-child{border-bottom:none;font-weight:500;padding-top:12px}
-.cost-amt{color:var(--color-text-primary);font-weight:500}
-.cost-amt.red{color:#A32D2D}
-.cost-amt.green{color:#1D9E75}
-.tab-row{display:flex;gap:4px;margin-bottom:20px;border-bottom:0.5px solid var(--color-border-tertiary);padding-bottom:0}
-.tab{background:none;border:none;cursor:pointer;padding:8px 14px;font-size:13px;color:var(--color-text-secondary);border-bottom:2px solid transparent;margin-bottom:-0.5px;font-family:var(--font-sans)}
-.tab.active{color:#1D9E75;border-bottom-color:#1D9E75;font-weight:500}
-.tool-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
-.tool-label{font-size:13px;color:var(--color-text-secondary);margin-bottom:6px}
-.tool-val{font-size:24px;font-weight:500;color:#1D9E75;margin-top:8px}
-input[type=range]{width:100%;accent-color:#1D9E75}
-input[type=number],select{width:100%;padding:8px 12px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-secondary);color:var(--color-text-primary);font-size:14px;font-family:var(--font-sans)}
-.action-btn{background:#1D9E75;color:#fff;border:none;padding:10px 20px;border-radius:var(--border-radius-md);font-size:14px;cursor:pointer;font-family:var(--font-sans);font-weight:500}
-.action-btn:hover{background:#0F6E56}
-.sec-btn{background:none;border:0.5px solid var(--color-border-secondary);color:var(--color-text-primary);padding:8px 16px;border-radius:var(--border-radius-md);font-size:13px;cursor:pointer;font-family:var(--font-sans)}
-.alert{border-radius:var(--border-radius-md);padding:12px 16px;font-size:13px;margin-bottom:16px}
-.alert-green{background:#E1F5EE;color:#0F6E56;border:0.5px solid #5DCAA5}
-.alert-amber{background:#FAEEDA;color:#854F0B;border:0.5px solid #EF9F27}
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.rev-bar{display:flex;align-items:center;gap:10px;margin:8px 0}
-.rev-bar-label{font-size:13px;width:120px;flex-shrink:0}
-.rev-bar-track{flex:1;height:20px;background:var(--color-background-secondary);border-radius:4px;overflow:hidden}
-.rev-bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;justify-content:end;padding-right:8px;font-size:11px;font-weight:500;color:#fff}
-.website-preview{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden}
-.site-topbar{background:#0F6E56;padding:14px 24px;color:#fff;display:flex;align-items:center;justify-content:space-between}
-.site-hero{background:#1D9E75;padding:40px 24px;color:#fff;text-align:center}
-.site-hero h2{font-size:24px;font-weight:500;margin-bottom:8px}
-.site-hero p{opacity:0.85;font-size:14px}
-.site-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
-.site-card{padding:16px;border-right:0.5px solid var(--color-border-tertiary);border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary)}
-.site-card:nth-child(3n){border-right:none}
-.site-card-icon{font-size:20px;margin-bottom:6px}
-.site-card-title{font-size:13px;font-weight:500;margin-bottom:4px}
-.site-card-text{font-size:12px;color:var(--color-text-secondary)}
-.site-cta{background:var(--color-background-secondary);padding:20px 24px;text-align:center}
-.site-footer{background:var(--color-background-primary);border-top:0.5px solid var(--color-border-tertiary);padding:14px 24px;font-size:12px;color:var(--color-text-secondary);display:flex;justify-content:space-between}
-.weather-row{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
-.weather-day{text-align:center;padding:12px 8px;background:var(--color-background-secondary);border-radius:var(--border-radius-md)}
-.weather-day .day{font-size:11px;color:var(--color-text-secondary)}
-.weather-day .icon{font-size:20px;margin:4px 0}
-.weather-day .temp{font-size:13px;font-weight:500}
-.tag-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.tag{background:var(--color-background-secondary);border-radius:99px;padding:4px 12px;font-size:12px;color:var(--color-text-secondary)}
-@media (max-width:760px){
-  .topbar{height:auto;min-height:88px;padding:18px 20px;align-items:flex-start;gap:16px;flex-direction:column}
-  .logo{font-size:30px}
-  .nav{gap:14px;flex-wrap:wrap}
-  .nav-btn{font-size:12px}
-  .hero{min-height:calc(100vh - 132px);padding-top:18vh}
-  .hero-actions{flex-direction:column}
-  .hero-actions button{width:100%}
-  .corp-band{padding:42px 20px}
-  .solution-grid,.impact-grid{grid-template-columns:1fr}
-  .impact-strip{padding:34px 20px}
-  .corp-title{font-size:32px}
+:root{
+  --bg:#F3F6F1; --surface:#FFFFFF; --surface-2:#EAF0E8; --ink:#16302A; --ink-2:#4F6660; --line:#D6E1D6;
+  --forest:#0E3B33; --leaf:#12806A; --leaf-ink:#FFFFFF; --mint:#9FE3C6; --crocus:#6E4FA3; --saffron:#D9961A;
+  --danger:#A3352D; --map-dot:rgba(159,227,198,.28);
+  --serif:"Fraunces",Georgia,"Times New Roman",serif;
+  --sans:"Public Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1916; --surface:#12231F; --surface-2:#182E28; --ink:#E4EFE9; --ink-2:#9DB3AB; --line:#25403A;
+    --forest:#06211C; --leaf:#3CC29B; --leaf-ink:#06211C; --mint:#9FE3C6; --crocus:#A88BDB; --saffron:#F0B545;
+    --danger:#E5847B; --map-dot:rgba(159,227,198,.22); color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1916; --surface:#12231F; --surface-2:#182E28; --ink:#E4EFE9; --ink-2:#9DB3AB; --line:#25403A;
+  --forest:#06211C; --leaf:#3CC29B; --leaf-ink:#06211C; --mint:#9FE3C6; --crocus:#A88BDB; --saffron:#F0B545;
+  --danger:#E5847B; --map-dot:rgba(159,227,198,.22); color-scheme:dark;
+}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--forest)}
+img,svg{max-width:100%}
+a{color:var(--leaf)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--saffron);outline-offset:2px;border-radius:4px}
+
+/* Header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--forest);color:#fff}
+.top-in{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:24px;padding:14px 24px}
+.logo{font-family:var(--serif);font-weight:700;font-size:26px;letter-spacing:-.01em;color:#fff;text-decoration:none;display:flex;align-items:center;gap:10px}
+.logo svg{width:26px;height:26px}
+.nav{display:flex;gap:4px;margin-left:auto;overflow-x:auto;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav a{color:#D5EDE3;text-decoration:none;padding:8px 14px;border-radius:99px;font-size:15px;font-weight:500;white-space:nowrap}
+.nav a:hover{background:rgba(255,255,255,.08);color:#fff}
+.nav a[aria-current="page"]{background:var(--mint);color:#0E3B33}
+.cart-btn{position:relative;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:99px;padding:8px 14px;cursor:pointer;font-size:15px;white-space:nowrap}
+.cart-btn b{background:var(--saffron);color:#1b1205;border-radius:99px;padding:0 7px;margin-left:6px;font-size:13px}
+
+main{min-height:70vh}
+.view{display:none}
+.view.on{display:block}
+.wrap{max-width:1180px;margin:0 auto;padding:48px 24px}
+h1,h2,h3{font-family:var(--serif);font-weight:600;letter-spacing:-.01em;line-height:1.1;margin:0}
+h2{font-size:clamp(28px,3.4vw,42px)}
+h3{font-size:22px}
+.lede{color:var(--ink-2);font-size:18px;max-width:62ch;margin:12px 0 0}
+.muted{color:var(--ink-2)}
+.small{font-size:14px}
+
+/* Hero */
+.hero{background:var(--forest);color:#fff;position:relative;overflow:hidden}
+.hero-in{max-width:1180px;margin:0 auto;padding:64px 24px 40px;display:grid;grid-template-columns:minmax(0,1fr);gap:8px;position:relative;z-index:2}
+.hero h1{font-size:clamp(44px,7.2vw,96px);font-weight:600;line-height:.98;max-width:13ch;letter-spacing:-.02em}
+.hero p{color:#CFE9DE;font-size:19px;max-width:54ch;margin:18px 0 26px}
+.hero-map{position:relative;z-index:1;max-width:1180px;margin:-30px auto 0;padding:0 24px 28px}
+.hero-map svg{display:block;width:100%;height:auto}
+.hero-foot{max-width:1180px;margin:0 auto;padding:0 24px 40px;display:flex;flex-wrap:wrap;gap:12px 32px;color:#CFE9DE;font-size:15px;position:relative;z-index:2}
+.hero-foot strong{color:#fff;font-family:var(--serif);font-size:24px;font-weight:600;margin-right:6px}
+.btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:8px;padding:12px 20px;font-weight:600;font-size:15px;cursor:pointer;text-decoration:none}
+.btn-primary{background:var(--mint);color:#0E3B33}
+.btn-primary:hover{filter:brightness(1.05)}
+.btn-ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.45)}
+.btn-solid{background:var(--leaf);color:var(--leaf-ink)}
+.btn-line{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+
+.pulse{animation:pulse 2.6s ease-out infinite;transform-origin:center;transform-box:fill-box}
+@keyframes pulse{0%{opacity:.85;transform:scale(1)}100%{opacity:0;transform:scale(3.2)}}
+@media (prefers-reduced-motion:reduce){.pulse{animation:none;opacity:0}}
+
+/* Sections */
+.split{display:grid;grid-template-columns:1.1fr 1fr;gap:48px;align-items:start}
+.lines{border-top:1px solid var(--line);margin-top:28px}
+.line-item{display:grid;grid-template-columns:180px 1fr;gap:20px;padding:20px 0;border-bottom:1px solid var(--line)}
+.line-item h3{font-size:20px}
+.line-item p{margin:0;color:var(--ink-2)}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px}
+.panel + .panel{margin-top:16px}
+.split > .panel + .panel{margin-top:0}
+.panel-title{font-family:var(--serif);font-size:20px;font-weight:600;margin:0 0 14px}
+
+/* Shop */
+.shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin-top:28px}
+.prod{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:6px}
+.prod .swatch{height:84px;border-radius:10px;margin-bottom:8px;display:flex;align-items:flex-end;padding:10px;font-size:13px;color:#fff;font-weight:600}
+.prod h3{font-size:20px}
+.prod .price{font-weight:700;font-size:18px}
+.prod .unit{color:var(--ink-2);font-size:14px}
+.prod p{margin:2px 0 10px;color:var(--ink-2);font-size:14px;flex:1}
+.qty{display:flex;align-items:center;gap:8px}
+.qty button{width:36px;height:36px;border-radius:8px;border:1px solid var(--line);background:var(--surface-2);cursor:pointer;font-size:18px;line-height:1}
+.qty span{min-width:24px;text-align:center;font-weight:600}
+.csa{margin-top:32px;background:var(--forest);color:#fff;border-radius:16px;padding:28px;display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center}
+.csa p{margin:6px 0 0;color:#CFE9DE}
+.toggle{display:flex;align-items:center;gap:10px;font-weight:600;cursor:pointer}
+.toggle input{width:20px;height:20px;accent-color:var(--saffron)}
+
+/* Drawer */
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(440px,100%);background:var(--surface);border-left:1px solid var(--line);z-index:40;transform:translateX(100%);transition:transform .25s ease;display:flex;flex-direction:column;padding:calc(env(safe-area-inset-top,0px) + 20px) 22px calc(env(safe-area-inset-bottom,0px) + 20px)}
+.drawer.open{transform:none}
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:35;display:none}
+.scrim.open{display:block}
+.drawer-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.x{background:none;border:0;font-size:26px;cursor:pointer;color:var(--ink-2)}
+.cart-lines{flex:1;overflow:auto;border-top:1px solid var(--line)}
+.cart-line{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-size:15px}
+label.f{display:block;font-size:14px;font-weight:600;margin:12px 0 6px}
+input.in,select.in,textarea.in{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2)}
+textarea.in{min-height:72px;resize:vertical}
+.total{display:flex;justify-content:space-between;font-weight:700;font-size:18px;margin:14px 0}
+.note{font-size:14px;padding:10px 12px;border-radius:8px;background:var(--surface-2);color:var(--ink-2);margin-top:10px}
+.note.ok{background:color-mix(in srgb,var(--leaf) 16%,var(--surface));color:var(--ink)}
+.note.err{background:color-mix(in srgb,var(--danger) 14%,var(--surface));color:var(--ink)}
+@media (prefers-reduced-motion:reduce){.drawer{transition:none}}
+
+/* Orders admin */
+.order{border-top:1px solid var(--line);padding:14px 0;display:grid;grid-template-columns:1fr auto;gap:8px 16px}
+.order:first-of-type{border-top:0}
+.status{display:inline-block;font-size:13px;font-weight:600;padding:2px 10px;border-radius:99px;background:var(--surface-2)}
+.status.requested{background:color-mix(in srgb,var(--saffron) 22%,var(--surface));}
+.status.confirmed{background:color-mix(in srgb,var(--leaf) 22%,var(--surface));}
+.status.fulfilled{background:color-mix(in srgb,var(--crocus) 20%,var(--surface));}
+
+/* Farm */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:24px 0 16px}
+.tabs button{border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:8px 16px;cursor:pointer;font-weight:500}
+.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.crop-body{display:grid;grid-template-columns:1.2fr 1fr;gap:28px}
+.kv{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line);font-size:15px}
+.kv:last-child{border-bottom:0;font-weight:700}
+.neg{color:var(--danger)} .pos{color:var(--leaf)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.chip{background:var(--surface-2);border-radius:99px;padding:4px 12px;font-size:13px;color:var(--ink-2)}
+.task{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line)}
+.task:last-child{border-bottom:0}
+.task input{width:20px;height:20px;margin-top:2px;accent-color:var(--leaf)}
+.task.done .t{text-decoration:line-through;color:var(--ink-2)}
+.task .when{font-size:13px;color:var(--ink-2)}
+.road{list-style:none;margin:0;padding:0;counter-reset:m}
+.road li{display:grid;grid-template-columns:96px 1fr;gap:16px;padding:14px 0;border-bottom:1px solid var(--line)}
+.road li:last-child{border-bottom:0}
+.road .m{font-weight:700;color:var(--leaf);font-size:14px}
+.road .d{color:var(--ink-2);font-size:14px;margin-top:2px}
+.alloc{display:grid;grid-template-columns:repeat(8,1fr);gap:3px;margin:8px 0 14px}
+.alloc div{height:26px;border-radius:4px}
+.legend{display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;font-size:14px}
+.legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:8px;background:var(--c)}
+.ask{display:flex;gap:8px;margin-top:10px}
+.ask input{flex:1}
+.answer{white-space:pre-wrap;margin-top:14px;font-size:15px;line-height:1.6;max-height:360px;overflow:auto}
+
+/* Network */
+.net-map{background:var(--forest);border-radius:16px;padding:16px;position:relative}
+.net-map svg{display:block;width:100%;height:auto}
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin:18px 0 8px}
+.filters button{border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:6px 14px;cursor:pointer;font-size:14px}
+.filters button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.hub-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-top:12px}
+.hub{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;cursor:pointer;text-align:left}
+.hub:hover,.hub.sel{border-color:var(--leaf)}
+.hub .k{font-size:13px;font-weight:600}
+.hub .n{font-weight:700;margin:2px 0}
+.hub .p{font-size:14px;color:var(--ink-2)}
+.tip{position:absolute;pointer-events:none;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:13px;max-width:240px;display:none;z-index:3;box-shadow:0 6px 20px rgba(0,0,0,.18)}
+.ext{list-style:none;padding:0;margin:0}
+.ext li{padding:12px 0;border-bottom:1px solid var(--line)}
+.ext li:last-child{border-bottom:0}
+.ext a{font-weight:600}
+.ext p{margin:2px 0 0;font-size:14px;color:var(--ink-2)}
+
+/* Investors */
+.figs{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:28px}
+.fig{background:var(--surface);padding:20px}
+.fig b{display:block;font-family:var(--serif);font-size:30px;font-weight:600}
+.fig span{color:var(--ink-2);font-size:14px}
+.bars .bar{display:grid;grid-template-columns:150px 1fr 80px;gap:12px;align-items:center;margin:10px 0;font-size:15px}
+.bars .track{height:14px;background:var(--surface-2);border-radius:99px;overflow:hidden}
+.bars .fill{height:100%;border-radius:99px}
+.bars .amt{text-align:right;font-weight:600}
+.sliders{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.sliders label{font-size:14px;font-weight:600;display:block}
+.sliders output{display:block;color:var(--ink-2);font-size:14px}
+input[type=range]{width:100%;accent-color:var(--leaf)}
+.calc-out{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:20px}
+.calc-out div{background:var(--surface-2);border-radius:10px;padding:14px}
+.calc-out b{display:block;font-size:22px}
+.calc-out span{font-size:13px;color:var(--ink-2)}
+
+footer{border-top:1px solid var(--line);margin-top:24px}
+footer .wrap{padding:28px 24px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;color:var(--ink-2);font-size:14px}
+
+@media (max-width:860px){
+  .split,.crop-body{grid-template-columns:1fr;gap:24px}
+  .figs,.calc-out{grid-template-columns:1fr 1fr}
+  .sliders{grid-template-columns:1fr}
+  .line-item{grid-template-columns:1fr;gap:6px}
+  .csa{grid-template-columns:1fr}
+  .bars .bar{grid-template-columns:110px 1fr 64px}
+  .top-in{flex-wrap:wrap;gap:10px 16px;padding:12px 16px}
+  .nav{order:3;width:100%;margin-left:0}
+  .cart-btn{margin-left:auto}
+  .wrap{padding:36px 16px}
+  .hero-in{padding:44px 16px 24px}
+  .hero-map,.hero-foot{padding-left:16px;padding-right:16px}
+  .hero-map{margin-top:0}
 }
 </style>
+</head>
+<body>
 
-<div class="app">
-<div class="topbar">
-  <div class="logo">
-    <div class="logo-icon"><i class="ti ti-plant" aria-hidden="true"></i></div>
-    BioAcreon
+<header class="top">
+  <div class="top-in">
+    <a class="logo" href="#home" aria-label="BioAcreon home">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 29V15" stroke="#9FE3C6" stroke-width="2.4" stroke-linecap="round"/><path d="M16 16C9 16 6 10 7 4c6 0 10 4 9 12Z" fill="#9FE3C6"/><path d="M16 19c6 0 9-5 9-10-5 0-9 3-9 10Z" fill="#E0A21B"/></svg>
+      BioAcreon
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="#home">Home</a>
+      <a href="#shop">Shop</a>
+      <a href="#farm">Farm</a>
+      <a href="#network">Global network</a>
+      <a href="#investors">Investors</a>
+      <a href="#app">Get the app</a>
+    </nav>
+    <button class="cart-btn" id="cartBtn" type="button">Basket<b id="cartCount">0</b></button>
   </div>
-  <div class="nav">
-    <button class="nav-btn active" onclick="showPage('dashboard')">Company</button>
-    <button class="nav-btn" onclick="showPage('crops')">Solutions</button>
-    <button class="nav-btn" onclick="showPage('financials')">Investors</button>
-    <button class="nav-btn" onclick="showPage('planner')">Sustainability</button>
-    <button class="nav-btn" onclick="showPage('website')">Contact</button>
-  </div>
-</div>
+</header>
 
-<div class="content">
+<main>
 
-<!-- DASHBOARD PAGE -->
-<div class="page active" id="page-dashboard">
+<!-- HOME -->
+<section class="view" id="v-home">
   <div class="hero">
-    <div class="hero-art">🌾</div>
-    <h1>Agriculture. Biotechnology. Innovation.</h1>
-    <p>BioAcreon</p>
-    <div class="hero-subcopy">Science-led crop production for resilient food systems, specialty nutrition, and high-value botanical ingredients.</div>
-    <div class="hero-actions">
-      <button onclick="showPage('crops')">Explore Solutions<span>Shop Now</span></button>
-      <button onclick="showPage('website')">Partner With Us<span>Join CSA</span></button>
+    <div class="hero-in">
+      <h1>Specialty crops, grown like an experiment.</h1>
+      <p>BioAcreon runs a two-acre controlled-environment farm for saffron, microgreens, gourmet mushrooms, medicinal herbs and specialty garlic, and trades with growers, buyers and researchers around the world.</p>
+      <div class="btns">
+        <a class="btn btn-primary" href="#shop">Shop the harvest</a>
+        <a class="btn btn-ghost" href="#network">Join the network</a>
+        <a class="btn btn-ghost" href="#app">Download the app</a>
+      </div>
     </div>
-    <div class="hero-badge">📍 Season: Spring–Summer 2025 &nbsp;|&nbsp; 2 Acres Active</div>
+    <div class="hero-map"><svg id="heroMap" viewBox="0 0 360 135" role="img" aria-label="World map of BioAcreon’s partner regions"></svg></div>
+    <div class="hero-foot">
+      <span><strong id="hubCount">12</strong>reference hubs</span>
+      <span><strong id="memberCount">0</strong>network members</span>
+      <span><strong>5</strong>crop lines</span>
+      <span><strong>2 ac</strong>under production</span>
+    </div>
   </div>
 
-  <section class="corp-band">
-    <div class="corp-inner">
-      <div class="corp-eyebrow">Our Purpose</div>
-      <h2 class="corp-title">Advancing controlled-environment farming with biotechnology, data, and responsible growth.</h2>
-      <p class="corp-copy">BioAcreon develops premium greenhouse crops and botanical ingredients through a practical blend of agronomy, biological systems, and market-focused production planning.</p>
-      <div class="solution-grid">
-        <div class="solution-card">
-          <div class="num">01</div>
-          <h3>Crop Solutions</h3>
-          <p>Microgreens, specialty herbs, mushrooms, saffron, and garlic planned for reliable yield, freshness, and premium positioning.</p>
+  <div class="wrap">
+    <div class="split">
+      <div>
+        <h2>How the farm works</h2>
+        <p class="lede">We treat every crop line as a production system with its own cycle, inputs and buyers. That keeps quality steady and waste low.</p>
+      </div>
+      <div class="lines" style="margin-top:0">
+        <div class="line-item"><h3>Grow</h3><p>Greenhouse racks for microgreens on 7–14 day cycles, a humidity-controlled room for mushrooms, and outdoor beds for saffron, herbs and garlic.</p></div>
+        <div class="line-item"><h3>Measure</h3><p>Soil and pH testing by zone, yield logs per harvest, and a shared task list the whole team works from.</p></div>
+        <div class="line-item"><h3>Sell direct</h3><p>Restaurants, wellness shops and CSA members order straight from this site. No middle layer.</p></div>
+        <div class="line-item"><h3>Connect</h3><p>Saffron origins, research centres and standards bodies on one map, plus every grower and buyer who joins.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SHOP -->
+<section class="view" id="v-shop">
+  <div class="wrap">
+    <h2>Shop the harvest</h2>
+    <p class="lede">Add what you need and send an order request. We confirm availability and pickup or delivery within a day.</p>
+    <div class="shop-grid" id="shopGrid"></div>
+
+    <div class="csa">
+      <div>
+        <h3 style="color:#fff">Weekly CSA box, $35</h3>
+        <p>Microgreens, a mushroom pack, fresh herbs and a seasonal extra every week. Cancel any time.</p>
+      </div>
+      <label class="toggle"><input type="checkbox" id="csaToggle"> Add CSA subscription</label>
+    </div>
+
+    <div class="panel" id="myOrderPanel" style="margin-top:32px;display:none">
+      <div class="panel-title">Your latest order</div>
+      <div id="myOrder"></div>
+    </div>
+
+    <div class="panel" id="adminOrders" style="margin-top:16px;display:none">
+      <div class="panel-title">Incoming orders</div>
+      <p class="muted small" style="margin-top:-6px">Only you and editors see this list.</p>
+      <div id="orderList"></div>
+    </div>
+  </div>
+</section>
+
+<!-- FARM -->
+<section class="view" id="v-farm">
+  <div class="wrap">
+    <h2>Farm operations</h2>
+    <p class="lede">Crop economics, the 12-month roadmap and this month’s task list. Figures are planning estimates for the first year.</p>
+
+    <div class="tabs" role="tablist" id="cropTabs"></div>
+    <div class="panel" id="cropPanel"></div>
+
+    <div class="split" style="margin-top:16px">
+      <div>
+        <div class="panel">
+          <div class="panel-title">Task list</div>
+          <p class="muted small" id="taskNote" style="margin-top:-6px">Shared with your team when signed in.</p>
+          <div id="tasks"></div>
         </div>
-        <div class="solution-card">
-          <div class="num">02</div>
-          <h3>Bio Innovation</h3>
-          <p>Greenhouse systems, biological inputs, and production cycles designed to reduce waste while improving quality consistency.</p>
-        </div>
-        <div class="solution-card">
-          <div class="num">03</div>
-          <h3>Market Access</h3>
-          <p>Direct channels for restaurants, wellness buyers, CSA members, and specialty retail partners who value traceable crops.</p>
+        <div class="panel">
+          <div class="panel-title">Land allocation, 2 acres</div>
+          <div class="alloc" id="alloc" aria-hidden="true"></div>
+          <div class="legend" id="legend"></div>
         </div>
       </div>
-    </div>
-  </section>
-
-  <section class="impact-strip">
-    <div class="impact-grid">
-      <div class="impact-item"><strong>2 ac</strong><span>Active production model</span></div>
-      <div class="impact-item"><strong>5</strong><span>Specialty crop lines</span></div>
-      <div class="impact-item"><strong>12 mo</strong><span>Launch roadmap</span></div>
-      <div class="impact-item"><strong>CSA</strong><span>Direct customer channel</span></div>
-    </div>
-  </section>
-
-  <div class="metric-row dashboard-tools">
-    <div class="metric">
-      <div class="val">$142K</div>
-      <div class="lbl">Projected Annual Revenue</div>
-      <div class="chg">↑ Best crop mix</div>
-    </div>
-    <div class="metric">
-      <div class="val">$38K</div>
-      <div class="lbl">Total Startup Cost</div>
-      <div class="chg">Low barrier</div>
-    </div>
-    <div class="metric">
-      <div class="val">$104K</div>
-      <div class="lbl">Year 1 Net Profit</div>
-      <div class="chg">↑ 273% ROI</div>
-    </div>
-    <div class="metric">
-      <div class="val">8 mo</div>
-      <div class="lbl">Payback Period</div>
-      <div class="chg">Fast return</div>
-    </div>
-  </div>
-
-  <div class="alert alert-green">
-    <i class="ti ti-bulb" aria-hidden="true"></i> <strong>Top opportunity:</strong> Saffron fetches $5,000–$10,000/lb and only needs ~1/4 acre. Microgreens can be harvested every 7–14 days with very low space needs. This combination dominates ROI on small land.
-  </div>
-
-  <div class="card">
-    <div class="card-title"><i class="ti ti-chart-bar" aria-hidden="true" style="color:#1D9E75"></i> Revenue by Crop (Annual)</div>
-    <div class="rev-bar"><div class="rev-bar-label">Saffron</div><div class="rev-bar-track"><div class="rev-bar-fill" style="width:64%;background:#1D9E75">$64K</div></div></div>
-    <div class="rev-bar"><div class="rev-bar-label">Microgreens</div><div class="rev-bar-track"><div class="rev-bar-fill" style="width:32%;background:#3B6D11">$32K</div></div></div>
-    <div class="rev-bar"><div class="rev-bar-label">Gourmet Mushrooms</div><div class="rev-bar-track"><div class="rev-bar-fill" style="width:22%;background:#0F6E56">$22K</div></div></div>
-    <div class="rev-bar"><div class="rev-bar-label">Medicinal Herbs</div><div class="rev-bar-track"><div class="rev-bar-fill" style="width:16%;background:#5DCAA5">$16K</div></div></div>
-    <div class="rev-bar"><div class="rev-bar-label">Specialty Garlic</div><div class="rev-bar-track"><div class="rev-bar-fill" style="width:8%;background:#9FE1CB">$8K</div></div></div>
-  </div>
-
-  <div class="two-col">
-    <div class="card">
-      <div class="card-title"><i class="ti ti-clock" aria-hidden="true" style="color:#1D9E75"></i> Next Tasks</div>
-      <div class="tl-item"><div class="tl-month">This week</div><div class="tl-dot"></div><div class="tl-body"><div class="tl-title">Soil testing & pH calibration</div><div class="tl-desc">Test all 4 zones</div></div></div>
-      <div class="tl-item"><div class="tl-month">Week 2</div><div class="tl-dot"></div><div class="tl-body"><div class="tl-title">Order saffron corms</div><div class="tl-desc">Source from reputable bulb suppliers</div></div></div>
-      <div class="tl-item"><div class="tl-month">Week 3</div><div class="tl-dot"></div><div class="tl-body"><div class="tl-title">Set up microgreens trays</div><div class="tl-desc">Build or buy grow racks</div></div></div>
-      <div class="tl-item"><div class="tl-month">Week 4</div><div class="tl-dot"></div><div class="tl-body"><div class="tl-title">Inoculate mushroom logs</div><div class="tl-desc">Oyster & shiitake spawn</div></div></div>
-    </div>
-    <div class="card">
-      <div class="card-title"><i class="ti ti-map" aria-hidden="true" style="color:#1D9E75"></i> Land Allocation (2 Acres)</div>
-      <div style="margin-top:4px">
-        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>Saffron</span><span style="color:#1D9E75">0.5 acres</span></div>
-        <div class="progress-bar"><div class="progress-fill" style="width:25%"></div></div>
-        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>Microgreens greenhouse</span><span style="color:#1D9E75">0.25 acres</span></div>
-        <div class="progress-bar"><div class="progress-fill" style="width:12.5%;background:#3B6D11"></div></div>
-        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>Gourmet Mushrooms</span><span style="color:#1D9E75">0.25 acres</span></div>
-        <div class="progress-bar"><div class="progress-fill" style="width:12.5%;background:#0F6E56"></div></div>
-        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>Medicinal Herbs</span><span style="color:#1D9E75">0.5 acres</span></div>
-        <div class="progress-bar"><div class="progress-fill" style="width:25%;background:#5DCAA5"></div></div>
-        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>Specialty Garlic</span><span style="color:#1D9E75">0.25 acres</span></div>
-        <div class="progress-bar"><div class="progress-fill" style="width:12.5%;background:#9FE1CB"></div></div>
-        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>Storage / Infrastructure</span><span style="color:var(--color-text-secondary)">0.25 acres</span></div>
-        <div class="progress-bar"><div class="progress-fill" style="width:12.5%;background:#B4B2A9"></div></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- CROPS PAGE -->
-<div class="page" id="page-crops">
-  <div class="card-title" style="font-size:18px;font-weight:500;margin-bottom:16px"><i class="ti ti-plant-2" aria-hidden="true" style="color:#1D9E75"></i> High-Value Crop Selection</div>
-  <div class="alert alert-amber"><i class="ti ti-info-circle" aria-hidden="true"></i> All crops below are proven high-revenue options for small acreage. Click any card to see full details.</div>
-
-  <div class="crop-grid">
-    <div class="crop-card selected" onclick="selectCrop(this,'saffron-detail')">
-      <div class="crop-icon">🌸</div>
-      <div class="crop-name">Saffron</div>
-      <div class="crop-rev">$5K–$10K/lb</div>
-      <div class="crop-meta">0.5 acres · Harvest Oct–Nov</div>
-      <div><span class="badge badge-green">Highest value/lb</span></div>
-    </div>
-    <div class="crop-card" onclick="selectCrop(this,'micro-detail')">
-      <div class="crop-icon">🌱</div>
-      <div class="crop-name">Microgreens</div>
-      <div class="crop-rev">$50–$100K/acre/yr</div>
-      <div class="crop-meta">0.25 acres · 7–14 day cycle</div>
-      <div><span class="badge badge-green">Fastest turnover</span></div>
-    </div>
-    <div class="crop-card" onclick="selectCrop(this,'mush-detail')">
-      <div class="crop-icon">🍄</div>
-      <div class="crop-name">Gourmet Mushrooms</div>
-      <div class="crop-rev">$6–$20/lb</div>
-      <div class="crop-meta">0.25 acres · Year-round</div>
-      <div><span class="badge badge-blue">Indoor friendly</span></div>
-    </div>
-    <div class="crop-card" onclick="selectCrop(this,'herb-detail')">
-      <div class="crop-icon">🌿</div>
-      <div class="crop-name">Medicinal Herbs</div>
-      <div class="crop-rev">$15–$40K/acre/yr</div>
-      <div class="crop-meta">0.5 acres · Perennial</div>
-      <div><span class="badge badge-green">Low maintenance</span></div>
-    </div>
-    <div class="crop-card" onclick="selectCrop(this,'garlic-detail')">
-      <div class="crop-icon">🧄</div>
-      <div class="crop-name">Specialty Garlic</div>
-      <div class="crop-rev">$10–$20/lb</div>
-      <div class="crop-meta">0.25 acres · Harvest June–July</div>
-      <div><span class="badge badge-amber">Easy to store/sell</span></div>
-    </div>
-  </div>
-
-  <div id="saffron-detail" class="detail-section card" style="margin-top:16px">
-    <div class="card-title">🌸 Saffron — The Red Gold</div>
-    <div class="two-col">
       <div>
-        <p style="font-size:13px;color:var(--color-text-secondary);line-height:1.7">Saffron is the most expensive spice in the world by weight. A single acre can yield 2–5 lbs of dried saffron annually. Each pound sells for $5,000–$10,000 to specialty buyers, restaurants, and online.</p>
-        <div class="tag-row"><div class="tag">Harvest: Oct–Nov</div><div class="tag">Climate: Dry summers</div><div class="tag">Water: Drought tolerant</div><div class="tag">Market: Restaurants, online</div></div>
-      </div>
-      <div>
-        <div class="cost-row"><span>Bulbs (corms) — 0.5 acres</span><span class="cost-amt red">–$3,000</span></div>
-        <div class="cost-row"><span>Soil prep & irrigation</span><span class="cost-amt red">–$1,500</span></div>
-        <div class="cost-row"><span>Labor (harvest is manual)</span><span class="cost-amt red">–$2,000</span></div>
-        <div class="cost-row"><span>Expected yield (2.5 lbs)</span><span class="cost-amt green">+$18,750</span></div>
-        <div class="cost-row"><span style="font-weight:500">Net Year 1</span><span class="cost-amt green">+$12,250</span></div>
-      </div>
-    </div>
-  </div>
-
-  <div id="micro-detail" class="detail-section card" style="margin-top:16px;display:none">
-    <div class="card-title">🌱 Microgreens — Fast Cash Crops</div>
-    <div class="two-col">
-      <div>
-        <p style="font-size:13px;color:var(--color-text-secondary);line-height:1.7">Microgreens grow in 7–14 days and sell for $25–$50 per flat or $25–$40/lb to restaurants and farmers markets. A 1,000 sq ft greenhouse can generate $50,000–$100,000/year running continuous cycles.</p>
-        <div class="tag-row"><div class="tag">Cycle: 7–14 days</div><div class="tag">Market: Restaurants, direct</div><div class="tag">Space: Indoor/greenhouse</div><div class="tag">Top varieties: sunflower, pea, radish</div></div>
-      </div>
-      <div>
-        <div class="cost-row"><span>Greenhouse setup</span><span class="cost-amt red">–$5,000</span></div>
-        <div class="cost-row"><span>Seeds & growing media</span><span class="cost-amt red">–$2,000/yr</span></div>
-        <div class="cost-row"><span>Lighting & water</span><span class="cost-amt red">–$3,600/yr</span></div>
-        <div class="cost-row"><span>Annual revenue (est.)</span><span class="cost-amt green">+$32,000</span></div>
-        <div class="cost-row"><span style="font-weight:500">Net Year 1</span><span class="cost-amt green">+$21,400</span></div>
+        <div class="panel">
+          <div class="panel-title">Ask the agronomist</div>
+          <p class="muted small" style="margin-top:-6px">Questions about timing, pests, pricing or buyers. Answers use this farm’s plan as context.</p>
+          <div class="ask">
+            <input class="in" id="askIn" placeholder="When should I order saffron corms?" aria-label="Your question">
+            <button class="btn btn-solid" id="askBtn" type="button">Ask</button>
+          </div>
+          <div class="answer muted" id="askOut"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-title">12-month roadmap</div>
+          <ol class="road" id="road"></ol>
+        </div>
       </div>
     </div>
   </div>
+</section>
 
-  <div id="mush-detail" class="detail-section card" style="margin-top:16px;display:none">
-    <div class="card-title">🍄 Gourmet Mushrooms</div>
-    <div class="two-col">
-      <div>
-        <p style="font-size:13px;color:var(--color-text-secondary);line-height:1.7">Oyster, shiitake, and lion's mane mushrooms sell for $6–$20/lb wholesale and $15–$40/lb retail. They grow year-round indoors on inexpensive substrates like straw or wood chips.</p>
-        <div class="tag-row"><div class="tag">Cycle: 6–10 weeks</div><div class="tag">Market: Restaurants, health food</div><div class="tag">Best: Oyster, Lion's Mane</div><div class="tag">High demand</div></div>
+<!-- NETWORK -->
+<section class="view" id="v-network">
+  <div class="wrap">
+    <h2>Global network</h2>
+    <p class="lede">The places that set prices, standards and know-how for our crops, and the growers and buyers who’ve joined us. Select a pin or a card for details.</p>
+
+    <div class="filters" id="filters"></div>
+    <div class="net-map">
+      <svg id="netMap" viewBox="0 0 360 135" role="img" aria-label="Interactive network map"></svg>
+      <div class="tip" id="tip"></div>
+    </div>
+    <div class="hub-list" id="hubList"></div>
+
+    <div class="split" style="margin-top:32px">
+      <div class="panel">
+        <div class="panel-title" id="joinTitle">Put your farm or business on the map</div>
+        <p class="muted small" style="margin-top:-6px">Growers, restaurants, distributors and labs. One pin per person; update it any time.</p>
+        <label class="f" for="jName">Name of farm or business</label>
+        <input class="in" id="jName" maxlength="60">
+        <label class="f" for="jType">You are a</label>
+        <select class="in" id="jType">
+          <option value="grower">Grower</option>
+          <option value="buyer">Buyer (restaurant, shop, distributor)</option>
+          <option value="research">Research or lab</option>
+        </select>
+        <label class="f" for="jCity">City</label>
+        <input class="in" id="jCity" maxlength="40">
+        <label class="f" for="jCountry">Country</label>
+        <select class="in" id="jCountry"></select>
+        <label class="f" for="jOffer">What you grow, buy or offer</label>
+        <input class="in" id="jOffer" maxlength="90" placeholder="Fresh oyster mushrooms, 20 lb a week">
+        <div class="btns" style="margin-top:16px">
+          <button class="btn btn-solid" id="jSave" type="button">Add my pin</button>
+          <button class="btn btn-line" id="jRemove" type="button" style="display:none">Remove my pin</button>
+        </div>
+        <div class="note" id="jNote" style="display:none"></div>
       </div>
-      <div>
-        <div class="cost-row"><span>Spawn & substrate setup</span><span class="cost-amt red">–$2,500</span></div>
-        <div class="cost-row"><span>Humidity/climate control</span><span class="cost-amt red">–$3,000</span></div>
-        <div class="cost-row"><span>Annual substrate refresh</span><span class="cost-amt red">–$1,200/yr</span></div>
-        <div class="cost-row"><span>Annual revenue (~1,500 lbs)</span><span class="cost-amt green">+$22,500</span></div>
-        <div class="cost-row"><span style="font-weight:500">Net Year 1</span><span class="cost-amt green">+$15,800</span></div>
-      </div>
-    </div>
-  </div>
-
-  <div id="herb-detail" class="detail-section card" style="margin-top:16px;display:none">
-    <div class="card-title">🌿 Medicinal Herbs</div>
-    <div class="two-col">
-      <div>
-        <p style="font-size:13px;color:var(--color-text-secondary);line-height:1.7">Lavender, echinacea, ashwagandha, and holy basil (tulsi) are in huge demand in wellness markets. Perennial herbs return year after year, reducing replanting costs significantly.</p>
-        <div class="tag-row"><div class="tag">Top: Lavender, Ashwagandha</div><div class="tag">Perennial — plant once</div><div class="tag">Market: Wellness, online</div><div class="tag">Dried & fresh</div></div>
-      </div>
-      <div>
-        <div class="cost-row"><span>Transplants & seeds</span><span class="cost-amt red">–$1,800</span></div>
-        <div class="cost-row"><span>Drip irrigation setup</span><span class="cost-amt red">–$1,200</span></div>
-        <div class="cost-row"><span>Drying/processing equipment</span><span class="cost-amt red">–$2,000</span></div>
-        <div class="cost-row"><span>Annual revenue (est.)</span><span class="cost-amt green">+$16,000</span></div>
-        <div class="cost-row"><span style="font-weight:500">Net Year 1</span><span class="cost-amt green">+$11,000</span></div>
-      </div>
-    </div>
-  </div>
-
-  <div id="garlic-detail" class="detail-section card" style="margin-top:16px;display:none">
-    <div class="card-title">🧄 Specialty Garlic</div>
-    <div class="two-col">
-      <div>
-        <p style="font-size:13px;color:var(--color-text-secondary);line-height:1.7">Hardneck and black garlic varieties sell for $10–$20/lb vs $1–$3/lb for commodity garlic. Easy to grow, store for 6+ months, and sell at farmers markets, restaurants, and online.</p>
-        <div class="tag-row"><div class="tag">Harvest: June–July</div><div class="tag">Stores 6+ months</div><div class="tag">Market: Farmers markets</div><div class="tag">Low competition</div></div>
-      </div>
-      <div>
-        <div class="cost-row"><span>Seed garlic (~200 lbs)</span><span class="cost-amt red">–$1,200</span></div>
-        <div class="cost-row"><span>Soil prep</span><span class="cost-amt red">–$500</span></div>
-        <div class="cost-row"><span>Labor (planting + harvest)</span><span class="cost-amt red">–$800</span></div>
-        <div class="cost-row"><span>Yield ~1,500 lbs @ $5/lb</span><span class="cost-amt green">+$7,500</span></div>
-        <div class="cost-row"><span style="font-weight:500">Net Year 1</span><span class="cost-amt green">+$5,000</span></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- FINANCIALS PAGE -->
-<div class="page" id="page-financials">
-  <div class="card-title" style="font-size:18px;font-weight:500;margin-bottom:16px"><i class="ti ti-chart-bar" aria-hidden="true" style="color:#1D9E75"></i> Business Financials</div>
-
-  <div class="metric-row">
-    <div class="metric"><div class="val">$38,300</div><div class="lbl">Total Startup Cost</div></div>
-    <div class="metric"><div class="val">$142,000</div><div class="lbl">Year 1 Revenue</div></div>
-    <div class="metric"><div class="val">$23,400</div><div class="lbl">Annual Operating Cost</div></div>
-    <div class="metric"><div class="val" style="color:#1D9E75">$80,300</div><div class="lbl">Year 1 Net Profit</div></div>
-  </div>
-
-  <div class="two-col">
-    <div class="card">
-      <div class="card-title"><i class="ti ti-trending-up" aria-hidden="true" style="color:#A32D2D"></i> Startup Costs</div>
-      <div class="cost-row"><span>Land lease (1 year)</span><span class="cost-amt red">–$6,000</span></div>
-      <div class="cost-row"><span>Saffron corms</span><span class="cost-amt red">–$3,000</span></div>
-      <div class="cost-row"><span>Microgreens greenhouse</span><span class="cost-amt red">–$5,000</span></div>
-      <div class="cost-row"><span>Mushroom setup</span><span class="cost-amt red">–$5,500</span></div>
-      <div class="cost-row"><span>Herb transplants & seeds</span><span class="cost-amt red">–$1,800</span></div>
-      <div class="cost-row"><span>Irrigation system</span><span class="cost-amt red">–$4,000</span></div>
-      <div class="cost-row"><span>Soil prep & equipment</span><span class="cost-amt red">–$5,000</span></div>
-      <div class="cost-row"><span>Tools, storage, fencing</span><span class="cost-amt red">–$4,000</span></div>
-      <div class="cost-row"><span>Permits & insurance</span><span class="cost-amt red">–$2,000</span></div>
-      <div class="cost-row"><span>Marketing & website</span><span class="cost-amt red">–$2,000</span></div>
-      <div class="cost-row"><span style="font-weight:500">Total startup</span><span class="cost-amt red" style="font-weight:500">–$38,300</span></div>
-    </div>
-    <div class="card">
-      <div class="card-title"><i class="ti ti-cash" aria-hidden="true" style="color:#1D9E75"></i> Revenue Streams</div>
-      <div class="cost-row"><span>Saffron (2.5 lbs @ $7.5K)</span><span class="cost-amt green">+$18,750</span></div>
-      <div class="cost-row"><span>Microgreens</span><span class="cost-amt green">+$32,000</span></div>
-      <div class="cost-row"><span>Gourmet mushrooms</span><span class="cost-amt green">+$22,500</span></div>
-      <div class="cost-row"><span>Medicinal herbs</span><span class="cost-amt green">+$16,000</span></div>
-      <div class="cost-row"><span>Specialty garlic</span><span class="cost-amt green">+$7,500</span></div>
-      <div class="cost-row"><span>Farm tours / workshops</span><span class="cost-amt green">+$3,600</span></div>
-      <div class="cost-row"><span>CSA box subscriptions</span><span class="cost-amt green">+$9,600</span></div>
-      <div class="cost-row"><span><strong>Gross Revenue</strong></span><span class="cost-amt green"><strong>$110,000</strong></span></div>
-      <div class="cost-row" style="border-top:2px solid var(--color-border-tertiary)"><span>Less: Operating costs</span><span class="cost-amt red">–$23,400</span></div>
-      <div class="cost-row"><span style="font-weight:500">Net profit Year 1</span><span class="cost-amt green" style="font-weight:500">$86,600</span></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-title"><i class="ti ti-calculator" aria-hidden="true" style="color:#1D9E75"></i> ROI Calculator — Adjust Your Plan</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px">
-      <div><div class="tool-label">Saffron price ($/lb)</div><input type="range" min="3000" max="12000" step="500" value="7500" id="saff-slider" oninput="calcROI()"><div style="font-size:12px;color:var(--color-text-secondary)" id="saff-val">$7,500/lb</div></div>
-      <div><div class="tool-label">Microgreens cycles/year</div><input type="range" min="15" max="30" step="1" value="22" id="micro-slider" oninput="calcROI()"><div style="font-size:12px;color:var(--color-text-secondary)" id="micro-val">22 cycles</div></div>
-      <div><div class="tool-label">Direct sales % (vs wholesale)</div><input type="range" min="0" max="100" step="5" value="50" id="direct-slider" oninput="calcROI()"><div style="font-size:12px;color:var(--color-text-secondary)" id="direct-val">50% direct</div></div>
-    </div>
-    <div class="metric-row">
-      <div class="metric"><div class="val" id="calc-rev">$110,000</div><div class="lbl">Adjusted Revenue</div></div>
-      <div class="metric"><div class="val" id="calc-profit">$86,600</div><div class="lbl">Net Profit</div></div>
-      <div class="metric"><div class="val" id="calc-roi">226%</div><div class="lbl">ROI</div></div>
-      <div class="metric"><div class="val" id="calc-payback">5.3 mo</div><div class="lbl">Payback Period</div></div>
-    </div>
-  </div>
-</div>
-
-<!-- PLANNER PAGE -->
-<div class="page" id="page-planner">
-  <div class="card-title" style="font-size:18px;font-weight:500;margin-bottom:16px"><i class="ti ti-calendar" aria-hidden="true" style="color:#1D9E75"></i> Crop Calendar & Planner</div>
-
-  <div class="card">
-    <div class="card-title">12-Month Farm Roadmap</div>
-    <div class="timeline">
-      <div class="tl-item"><div class="tl-month">Month 1</div><div class="tl-dot"></div><div class="tl-body"><div class="tl-title">Foundation & Setup</div><div class="tl-desc">Soil testing, irrigation install, greenhouse frame. Obtain permits. Order all seeds & spawn.</div></div></div>
-      <div class="tl-item"><div class="tl-month">Month 2</div><div class="tl-dot"></div><div class="tl-body"><div class="tl-title">First Microgreens Harvest</div><div class="tl-desc">First tray planted week 1, first revenue by week 2. Begin selling to local restaurants.</div></div></div>
-      <div class="tl-item"><div class="tl-month">Month 3</div><div class="tl-dot"></div><div class="tl-body"><div class="tl-title">Mushrooms Fruiting + Herbs Planted</div><div class="tl-desc">Oyster mushrooms begin fruiting. Lavender, echinacea, ashwagandha seedlings in ground.</div></div></div>
-      <div class="tl-item"><div class="tl-month">Month 4–5</div><div class="tl-dot"></div><div class="tl-body"><div class="tl-title">Garlic Planted + Scale Microgreens</div><div class="tl-desc">Specialty garlic cloves in ground (plant Sep–Oct). Microgreens at 3–4 concurrent trays.</div></div></div>
-      <div class="tl-item"><div class="tl-month">Month 6–7</div><div class="tl-dot"></div><div class="tl-body"><div class="tl-title">Plant Saffron Corms</div><div class="tl-desc">Plant 0.5 acre of saffron corms Aug–Sep for Oct–Nov bloom. CSA subscriptions launch.</div></div></div>
-      <div class="tl-item"><div class="tl-month">Month 8–9</div><div class="tl-dot"></div><div class="tl-body"><div class="tl-title">🌸 Saffron Harvest (BIG REVENUE)</div><div class="tl-desc">Flowers bloom at dawn. Hand-harvest stigmas daily. Dry and package. First saffron sales.</div></div></div>
-      <div class="tl-item"><div class="tl-month">Month 10–11</div><div class="tl-dot"></div><div class="tl-body"><div class="tl-title">🧄 Garlic Harvest + Herb Drying</div><div class="tl-desc">Garlic pulled, cured 3 weeks. First herb harvest — lavender bundles, dried ashwagandha root.</div></div></div>
-      <div class="tl-item"><div class="tl-month">Month 12</div><div class="tl-dot"></div><div class="tl-body"><div class="tl-title">Year-End Review + Scale Plan</div><div class="tl-desc">Assess yields. Plan Year 2 expansion. Reinvest in more saffron corms (self-propagating).</div></div></div>
-    </div>
-  </div>
-
-  <div class="two-col">
-    <div class="card">
-      <div class="card-title"><i class="ti ti-building-store" aria-hidden="true" style="color:#1D9E75"></i> Where to Sell</div>
-      <div class="tl-item"><div class="tl-dot" style="margin-top:4px"></div><div class="tl-body"><div class="tl-title">Local restaurants & chefs</div><div class="tl-desc">Highest price, consistent orders. Start cold-calling with samples.</div></div></div>
-      <div class="tl-item"><div class="tl-dot" style="margin-top:4px"></div><div class="tl-body"><div class="tl-title">Farmers markets</div><div class="tl-desc">$25–$40/lb microgreens, premium herb bundles, garlic braids.</div></div></div>
-      <div class="tl-item"><div class="tl-dot" style="margin-top:4px"></div><div class="tl-body"><div class="tl-title">Online (Etsy, own website)</div><div class="tl-desc">Dried saffron, herbs, garlic ship well. 2x–3x wholesale price.</div></div></div>
-      <div class="tl-item"><div class="tl-dot" style="margin-top:4px"></div><div class="tl-body"><div class="tl-title">CSA subscriptions</div><div class="tl-desc">Weekly boxes — guaranteed recurring income. $30–$50/box.</div></div></div>
-      <div class="tl-item"><div class="tl-dot" style="margin-top:4px"></div><div class="tl-body"><div class="tl-title">Wellness shops & herbalists</div><div class="tl-desc">Dried medicinal herbs wholesale in bulk.</div></div></div>
-    </div>
-    <div class="card">
-      <div class="card-title"><i class="ti ti-alert-triangle" aria-hidden="true" style="color:#BA7517"></i> Risks & Mitigation</div>
-      <div class="tl-item"><div class="tl-dot" style="margin-top:4px;background:#BA7517"></div><div class="tl-body"><div class="tl-title">Weather / frost</div><div class="tl-desc">Use row covers, cold frames. Diversify crops.</div></div></div>
-      <div class="tl-item"><div class="tl-dot" style="margin-top:4px;background:#BA7517"></div><div class="tl-body"><div class="tl-title">Market access</div><div class="tl-desc">Line up 3+ buyers before harvest. Don't rely on one.</div></div></div>
-      <div class="tl-item"><div class="tl-dot" style="margin-top:4px;background:#BA7517"></div><div class="tl-body"><div class="tl-title">Pest & disease</div><div class="tl-desc">IPM approach. Keep mushroom area sterile. Rotate herbs.</div></div></div>
-      <div class="tl-item"><div class="tl-dot" style="margin-top:4px;background:#BA7517"></div><div class="tl-body"><div class="tl-title">Labor at saffron harvest</div><div class="tl-desc">Hire temp help 3–4 weeks. Budget $2K for harvest labor.</div></div></div>
-      <div class="tl-item"><div class="tl-dot" style="margin-top:4px;background:#BA7517"></div><div class="tl-body"><div class="tl-title">Year 1 saffron yield low</div><div class="tl-desc">Normal — corms multiply x3 in 3 years. Other crops cover cash flow.</div></div></div>
-    </div>
-  </div>
-</div>
-
-<!-- WEBSITE PAGE -->
-<div class="page" id="page-website">
-  <div class="card-title" style="font-size:18px;font-weight:500;margin-bottom:8px"><i class="ti ti-world" aria-hidden="true" style="color:#1D9E75"></i> Your Farm Website Preview</div>
-  <p style="font-size:13px;color:var(--color-text-secondary);margin-bottom:16px">This is what your business website would look like. Click "Get full website code ↗" to get the complete HTML file.</p>
-
-  <div class="website-preview">
-    <div class="site-topbar">
-      <div style="font-weight:500;font-size:15px">🌾 BioAcreon</div>
-      <div style="display:flex;gap:16px;font-size:13px;opacity:0.85">
-        <span>Crops</span><span>About</span><span>Shop</span><span>Contact</span>
+      <div class="panel">
+        <div class="panel-title">Standards and networks we work with</div>
+        <ul class="ext">
+          <li><a href="https://www.iso.org/standard/44526.html" target="_blank" rel="noopener">ISO 3632 saffron grading</a><p>The international test for saffron colour, aroma and purity. Buyers abroad ask for it.</p></li>
+          <li><a href="https://www.globalgap.org" target="_blank" rel="noopener">GLOBALG.A.P.</a><p>Farm assurance certification recognised by retailers in over 130 countries.</p></li>
+          <li><a href="https://openfoodnetwork.org" target="_blank" rel="noopener">Open Food Network</a><p>Open-source marketplace for local food hubs, used in more than 20 countries.</p></li>
+          <li><a href="https://www.ams.usda.gov/market-news" target="_blank" rel="noopener">USDA Market News</a><p>Wholesale prices for herbs, mushrooms and specialty produce in US terminal markets.</p></li>
+          <li><a href="https://www.fao.org/statistics/en" target="_blank" rel="noopener">FAO statistics</a><p>Global production and trade data by crop and country.</p></li>
+        </ul>
       </div>
     </div>
-    <div class="site-hero">
-      <p style="font-size:11px;opacity:0.7;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px">Small Farm · Big Flavor</p>
-      <h2>Premium Specialty Crops<br>Grown with Care</h2>
-      <p>Saffron · Microgreens · Gourmet Mushrooms · Medicinal Herbs</p>
-      <div style="margin-top:16px;display:flex;gap:8px;justify-content:center">
-        <button class="action-btn" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4)">Shop Now</button>
-        <button class="action-btn" style="background:rgba(255,255,255,0.9);color:#0F6E56">Join CSA</button>
+  </div>
+</section>
+
+<!-- INVESTORS -->
+<section class="view" id="v-investors">
+  <div class="wrap">
+    <h2>Investor overview</h2>
+    <p class="lede">Year-one plan for a two-acre site. Startup costs are paid once; operating costs repeat each year.</p>
+
+    <div class="figs">
+      <div class="fig"><b>$110K</b><span>Year 1 revenue</span></div>
+      <div class="fig"><b>$38.3K</b><span>Startup cost</span></div>
+      <div class="fig"><b>$86.6K</b><span>Operating profit</span></div>
+      <div class="fig"><b>5.3 mo</b><span>Payback on startup</span></div>
+    </div>
+
+    <div class="split" style="margin-top:16px">
+      <div class="panel">
+        <div class="panel-title">Revenue by stream</div>
+        <div class="bars" id="bars"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Startup costs</div>
+        <div id="startup"></div>
       </div>
     </div>
-    <div class="site-grid">
-      <div class="site-card"><div class="site-card-icon">🌸</div><div class="site-card-title">Saffron</div><div class="site-card-text">Certified pure. Hand-harvested.</div></div>
-      <div class="site-card"><div class="site-card-icon">🌱</div><div class="site-card-title">Microgreens</div><div class="site-card-text">Fresh cut. Same-day delivery.</div></div>
-      <div class="site-card"><div class="site-card-icon">🍄</div><div class="site-card-title">Mushrooms</div><div class="site-card-text">Oyster, shiitake & lion's mane.</div></div>
-      <div class="site-card"><div class="site-card-icon">🌿</div><div class="site-card-title">Medicinal Herbs</div><div class="site-card-text">Dried organic bundles.</div></div>
-      <div class="site-card"><div class="site-card-icon">📦</div><div class="site-card-title">CSA Boxes</div><div class="site-card-text">Weekly farm-fresh boxes.</div></div>
-      <div class="site-card"><div class="site-card-icon">🚜</div><div class="site-card-title">Farm Tours</div><div class="site-card-text">Book a visit & workshop.</div></div>
-    </div>
-    <div class="site-cta">
-      <div style="font-size:15px;font-weight:500;margin-bottom:6px">Join Our Weekly CSA</div>
-      <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:12px">Get seasonal microgreens, herbs & specialty produce delivered every week.</div>
-      <button class="action-btn" style="font-size:13px;padding:8px 20px">Subscribe — $35/week</button>
-    </div>
-    <div class="site-footer">
-      <span>© 2025 BioAcreon</span>
-      <span>📍 Local Delivery Available · Farmers Market Saturdays</span>
+
+    <div class="panel">
+      <div class="panel-title">Adjust the plan</div>
+      <div class="sliders">
+        <div><label for="sSaff">Saffron price per lb</label><input type="range" id="sSaff" min="3000" max="12000" step="500" value="7500"><output id="oSaff"></output></div>
+        <div><label for="sMicro">Microgreen cycles per year</label><input type="range" id="sMicro" min="15" max="30" step="1" value="22"><output id="oMicro"></output></div>
+        <div><label for="sDirect">Share sold direct (vs wholesale)</label><input type="range" id="sDirect" min="0" max="100" step="5" value="50"><output id="oDirect"></output></div>
+      </div>
+      <div class="calc-out">
+        <div><b id="cRev"></b><span>Revenue</span></div>
+        <div><b id="cProfit"></b><span>Operating profit</span></div>
+        <div><b id="cRoi"></b><span>Return on startup</span></div>
+        <div><b id="cPay"></b><span>Payback</span></div>
+      </div>
+      <p class="muted small" style="margin:14px 0 0">First-year saffron yields are usually low; corms multiply over three seasons, so the other crops carry cash flow early on.</p>
     </div>
   </div>
+</section>
 
-  <div style="margin-top:16px;display:flex;gap:8px">
-    <button class="action-btn" onclick="sendPrompt('Generate the complete HTML code for the BioAcreon website so I can download and deploy it')">Get full website code ↗</button>
-    <button class="sec-btn" onclick="sendPrompt('Give me a business name ideas and taglines for my specialty crop farm')">Brand name ideas ↗</button>
-    <button class="sec-btn" onclick="sendPrompt('Write a restaurant pitch email for selling microgreens and mushrooms from my farm')">Pitch email for restaurants ↗</button>
+<!-- APP -->
+<section class="view" id="v-app">
+  <div class="wrap">
+    <h2>Get the BioAcreon app</h2>
+    <p class="lede">Take the full farm app with you: shop, crop planner, global network map and investor calculator in one file that opens in any browser, on or offline.</p>
+    <div class="split" style="margin-top:28px">
+      <div class="panel">
+        <div class="panel-title">Download</div>
+        <p class="muted" style="margin-top:-6px">One HTML file, under 60 KB. Open it in Chrome, Safari, Edge or Firefox. On a phone, open it and use “Add to Home Screen”.</p>
+        <div class="btns" style="margin-top:16px">
+          <a class="btn btn-solid" href="index.html" download="BioAcreon-app.html">Download the app</a>
+          <a class="btn btn-line" id="liveLink" href="#" target="_blank" rel="noopener">Open the live app</a>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">What works where</div>
+        <div class="kv"><span>Shop, crop planner, roadmap, calculator, map</span><span class="pos">Everywhere</span></div>
+        <div class="kv"><span>Order requests and network pins</span><span>Sent by email here; saved live in the live app</span></div>
+        <div class="kv"><span>Shared task list and agronomist</span><span>Live app only</span></div>
+      </div>
+    </div>
   </div>
-</div>
+</section>
 
-</div>
-</div>
+</main>
+
+<footer><div class="wrap"><span>© 2026 BioAcreon</span><span>Farm pickup and local delivery. <a href="#app">Download the app</a></span></div></footer>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="Basket" aria-hidden="true">
+  <div class="drawer-head"><h3>Your basket</h3><button class="x" id="closeCart" type="button" aria-label="Close basket">×</button></div>
+  <div class="cart-lines" id="cartLines"></div>
+  <div class="total"><span>Total</span><span id="cartTotal">$0</span></div>
+  <label class="f" for="oName">Name or business</label>
+  <input class="in" id="oName" maxlength="60">
+  <label class="f" for="oContact">Phone or email</label>
+  <input class="in" id="oContact" maxlength="80">
+  <label class="f" for="oHow">Pickup or delivery</label>
+  <select class="in" id="oHow"><option>Farm pickup</option><option>Local delivery</option><option>Ship (dried goods only)</option></select>
+  <button class="btn btn-solid" id="placeOrder" type="button" style="margin-top:16px">Send order request</button>
+  <div class="note" id="orderNote" style="display:none"></div>
+</aside>
 
 <script>
-function showPage(id){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('page-'+id).classList.add('active');
-  document.querySelector(`.nav-btn[onclick="showPage('${id}')"]`)?.classList.add('active');
+/* ---------- Settings: change these two lines ---------- */
+const CONTACT_EMAIL="sharathmandula45@gmail.com";
+const LIVE_APP_URL="https://claude.ai/artifact/5K3EF4ZadfouDQeGGtLz2L";
+
+/* ---------- Data ---------- */
+const PRODUCTS=[
+ {id:"saffron",name:"Saffron threads",unit:"1 g vial",price:16,desc:"Hand-picked stigmas, dried the same morning.",bg:"#6E4FA3",tag:"Oct–Nov harvest"},
+ {id:"micro",name:"Microgreens mix",unit:"4 oz clamshell",price:8,desc:"Sunflower, pea and radish. Cut to order.",bg:"#3B7A1E",tag:"Weekly"},
+ {id:"oyster",name:"Oyster mushrooms",unit:"1 lb",price:14,desc:"Blue and golden oyster, picked within 24 hours.",bg:"#5E6B66",tag:"Year-round"},
+ {id:"lions",name:"Lion’s mane",unit:"1 lb",price:18,desc:"Firm, sweet and great seared like scallops.",bg:"#A88A55",tag:"Year-round"},
+ {id:"lavender",name:"Lavender bundle",unit:"Dried bunch",price:12,desc:"Culinary and aromatic grade.",bg:"#8C7BC2",tag:"Summer"},
+ {id:"ashwa",name:"Ashwagandha root",unit:"4 oz, dried",price:14,desc:"Washed, sliced and slow-dried.",bg:"#8A5A2B",tag:"Autumn"},
+ {id:"garlic",name:"Hardneck garlic",unit:"1 lb",price:14,desc:"Rich, spicy cloves that store for months.",bg:"#B9A27A",tag:"Jun–Jul harvest"},
+ {id:"blackgarlic",name:"Black garlic",unit:"4 oz",price:10,desc:"Slow-aged until sweet and soft.",bg:"#2E2A28",tag:"Year-round"}
+];
+const CSA_PRICE=35;
+
+const CROPS=[
+ {id:"saffron",name:"Saffron",area:"0.5 acres",text:"The most expensive spice by weight. Half an acre is planned to yield about 2.5 lb of dried saffron once corms establish, sold to restaurants, specialty grocers and online at $5,000–$10,000 per lb.",chips:["Harvest Oct–Nov","Drought tolerant","Manual harvest"],costs:[["Corms",-3000],["Soil prep and irrigation",-1500],["Harvest labour",-2000],["Revenue, 2.5 lb at $7,500",18750]]},
+ {id:"micro",name:"Microgreens",area:"0.25 acres",text:"Ready in 7–14 days and sold at $25–$40 per lb. A 1,000 sq ft greenhouse running continuous trays covers restaurant and market demand.",chips:["7–14 day cycle","Greenhouse","Sunflower, pea, radish"],costs:[["Greenhouse setup",-5000],["Seeds and media, per year",-2000],["Lighting and water, per year",-3600],["Revenue, per year",32000]]},
+ {id:"mush",name:"Gourmet mushrooms",area:"0.25 acres",text:"Oyster, shiitake and lion’s mane grown indoors on straw and hardwood. About 1,500 lb a year at $6–$20 per lb wholesale.",chips:["6–10 week cycle","Indoor","High restaurant demand"],costs:[["Spawn and substrate setup",-2500],["Humidity and climate control",-3000],["Substrate refresh, per year",-1200],["Revenue, ~1,500 lb",22500]]},
+ {id:"herbs",name:"Medicinal herbs",area:"0.5 acres",text:"Lavender, echinacea, ashwagandha and tulsi for wellness buyers. Perennials come back each year, so replanting costs drop after year one.",chips:["Perennial","Dried and fresh","Wellness market"],costs:[["Transplants and seeds",-1800],["Drip irrigation",-1200],["Drying equipment",-2000],["Revenue, per year",16000]]},
+ {id:"garlic",name:"Specialty garlic",area:"0.25 acres",text:"Hardneck and black garlic sell for $10–$20 per lb against $1–$3 for commodity bulbs. Stores for six months or more.",chips:["Harvest Jun–Jul","Stores 6+ months","Farmers markets"],costs:[["Seed garlic, ~200 lb",-1200],["Soil prep",-500],["Planting and harvest labour",-800],["Revenue, 1,500 lb at $5 wholesale",7500]]}
+];
+const ROAD=[
+ ["Month 1","Foundation","Soil tests, irrigation, greenhouse frame, permits. Order seed and spawn."],
+ ["Month 2","First microgreens","First trays in week one, first sales by week two."],
+ ["Month 3","Mushrooms and herbs","Oyster mushrooms fruit. Herb seedlings go in the ground."],
+ ["Months 4–5","Garlic and scale-up","Plant garlic in Sep–Oct. Run 3–4 microgreen racks at once."],
+ ["Months 6–7","Saffron corms","Plant corms Aug–Sep for autumn bloom. CSA launches."],
+ ["Months 8–9","Saffron harvest","Pick flowers at dawn, separate stigmas, dry and pack."],
+ ["Months 10–11","Garlic and herb harvest","Cure garlic for three weeks. Dry lavender and ashwagandha."],
+ ["Month 12","Review","Compare yields to plan. Replant corms and set year-two targets."]
+];
+const DEFAULT_TASKS=[
+ {id:"t1",t:"Soil test and pH calibration",when:"This week",d:"All four zones"},
+ {id:"t2",t:"Order saffron corms",when:"Week 2",d:"Two suppliers, compare corm size"},
+ {id:"t3",t:"Set up microgreen racks",when:"Week 3",d:"Lights, trays, irrigation timer"},
+ {id:"t4",t:"Inoculate mushroom substrate",when:"Week 4",d:"Oyster and shiitake spawn"},
+ {id:"t5",t:"Call five restaurants with samples",when:"Week 4",d:"Microgreens and oyster mushrooms"}
+];
+const ALLOC=[["Saffron",.5,"#6E4FA3"],["Microgreens",.25,"#3B7A1E"],["Mushrooms",.25,"#5E6B66"],["Herbs",.5,"#8C7BC2"],["Garlic",.25,"#B9A27A"],["Storage",.25,"#9AA59F"]];
+
+const TYPES={origin:{label:"Saffron origins",color:"#C9A5F2"},cea:{label:"Growing hubs",color:"#9FE3C6"},research:{label:"Research",color:"#F0B545"},grower:{label:"Member growers",color:"#7FD38B"},buyer:{label:"Member buyers",color:"#FF9E8A"}};
+const HUBS=[
+ {n:"Khorasan, Iran",t:"origin",lon:59.6,lat:34.5,p:"Grows roughly 90% of the world’s saffron. Sets global price expectations."},
+ {n:"La Mancha, Spain",t:"origin",lon:-3.0,lat:39.2,p:"Protected-origin saffron. Benchmark for premium European buyers."},
+ {n:"Pampore, Kashmir",t:"origin",lon:74.9,lat:34.0,p:"Known for long, deep-red mongra threads with high crocin."},
+ {n:"Herat, Afghanistan",t:"origin",lon:62.2,lat:34.3,p:"Fast-growing producer with strong ISO-graded export lots."},
+ {n:"Taliouine, Morocco",t:"origin",lon:-7.9,lat:30.5,p:"Cooperative-grown saffron in the Anti-Atlas mountains."},
+ {n:"Kozani, Greece",t:"origin",lon:21.8,lat:40.3,p:"Krokos Kozanis, a cooperative with protected origin status."},
+ {n:"Westland, Netherlands",t:"cea",lon:4.2,lat:52.0,p:"The world’s densest greenhouse cluster. Lighting and climate tech."},
+ {n:"Kennett Square, USA",t:"cea",lon:-75.7,lat:39.8,p:"Produces about half of US mushrooms. Spawn and substrate suppliers."},
+ {n:"Provence, France",t:"cea",lon:5.9,lat:43.8,p:"Lavender fields and essential-oil distillers."},
+ {n:"Wageningen, Netherlands",t:"research",lon:5.7,lat:51.97,p:"Leading university for horticulture and vertical farming research."},
+ {n:"ICRISAT, Hyderabad",t:"research",lon:78.3,lat:17.5,p:"International crops research institute for dryland agriculture."},
+ {n:"CSIR-CIMAP, Lucknow",t:"research",lon:80.9,lat:26.85,p:"India’s medicinal and aromatic plants institute, including ashwagandha."}
+];
+const COUNTRIES=[["United States",-98,39],["Canada",-100,56],["Mexico",-102,23],["Brazil",-52,-10],["Argentina",-64,-34],["Chile",-71,-33],["Colombia",-74,4],["Peru",-75,-10],["United Kingdom",-2,53],["Ireland",-8,53],["France",2.5,46.5],["Spain",-3.7,40],["Portugal",-8,39.5],["Netherlands",5.3,52.2],["Germany",10,51],["Italy",12.5,42.8],["Greece",22,39.5],["Switzerland",8.2,46.8],["Poland",19,52],["Sweden",16,62],["Turkey",35,39],["Morocco",-6,32],["Egypt",30,26],["Nigeria",8,9.5],["Kenya",38,0],["South Africa",24,-29],["United Arab Emirates",54,24],["Saudi Arabia",45,24],["Iran",54,32],["Afghanistan",66,34],["Pakistan",70,30],["India",79,22],["Bangladesh",90,24],["Sri Lanka",80.7,7.8],["Nepal",84,28],["China",104,35],["Japan",138,36.5],["South Korea",128,36.5],["Thailand",101,15],["Vietnam",106,16],["Malaysia",102,4],["Singapore",103.8,1.35],["Indonesia",113,-1],["Philippines",122,12],["Australia",134,-25],["New Zealand",172,-41]];
+
+/* ---------- Helpers ---------- */
+const $=s=>document.querySelector(s);
+const money=n=>"$"+Math.round(n).toLocaleString("en-US");
+function el(tag,attrs={},...kids){const e=document.createElement(tag);for(const[k,v]of Object.entries(attrs)){if(k==="class")e.className=v;else if(k==="text")e.textContent=v;else if(k.startsWith("on"))e.addEventListener(k.slice(2),v);else e.setAttribute(k,v)}for(const c of kids)if(c!=null)e.append(c);return e}
+function note(node,msg,kind){node.style.display=msg?"block":"none";node.textContent=msg||"";node.className="note"+(kind?" "+kind:"")}
+
+/* ---------- Routing ---------- */
+const VIEWS=["home","shop","farm","network","investors","app"];
+function route(){
+  const h=(location.hash||"#home").slice(1);
+  const v=VIEWS.includes(h)?h:"home";
+  document.querySelectorAll(".view").forEach(s=>s.classList.toggle("on",s.id==="v-"+v));
+  document.querySelectorAll(".nav a").forEach(a=>{if(a.getAttribute("href")==="#"+v)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
+  window.scrollTo(0,0);
 }
-function selectCrop(el,detailId){
-  document.querySelectorAll('.crop-card').forEach(c=>c.classList.remove('selected'));
-  document.querySelectorAll('.detail-section').forEach(d=>d.style.display='none');
-  el.classList.add('selected');
-  document.getElementById(detailId).style.display='block';
+addEventListener("hashchange",route);
+
+/* ---------- World map (stylised dot grid) ---------- */
+const LAND=[
+ [[-165,65],[-160,71],[-130,70],[-95,72],[-80,73],[-62,60],[-55,52],[-66,45],[-75,35],[-81,25],[-97,26],[-97,19],[-87,21],[-83,10],[-78,8],[-92,15],[-105,20],[-112,30],[-118,33],[-124,40],[-124,48],[-135,58],[-150,60],[-165,58]],
+ [[-55,60],[-45,60],[-20,70],[-20,82],[-60,82],[-70,76],[-55,68]],
+ [[-78,8],[-60,10],[-50,0],[-35,-6],[-40,-22],[-48,-28],[-58,-38],[-65,-42],[-68,-55],[-75,-50],[-72,-30],[-70,-18],[-81,-5],[-80,2]],
+ [[-10,36],[-9,43],[-2,44],[-5,48],[2,51],[8,54],[10,57],[5,58],[5,62],[15,69],[28,71],[40,68],[60,70],[60,45],[50,45],[40,41],[28,41],[26,38],[22,37],[18,40],[12,44],[15,38],[8,44],[3,43],[-2,36]],
+ [[26,40],[36,36],[35,30],[43,13],[52,16],[58,22],[60,25],[67,24],[72,20],[77,8],[80,15],[88,22],[92,20],[98,16],[100,6],[104,1],[105,10],[109,12],[108,21],[117,24],[122,30],[121,40],[126,38],[130,43],[140,48],[142,55],[155,60],[163,62],[180,66],[180,72],[140,73],[110,77],[80,73],[60,70],[60,45],[50,45],[40,41]],
+ [[-17,21],[-16,12],[-8,4],[5,5],[10,3],[9,-1],[13,-10],[12,-17],[18,-34],[26,-34],[33,-26],[35,-18],[40,-15],[40,-5],[44,0],[51,11],[43,12],[37,18],[33,31],[20,32],[10,37],[-6,36],[-10,30]],
+ [[44,-25],[47,-25],[50,-15],[49,-12],[44,-17]],
+ [[114,-22],[122,-18],[130,-12],[137,-12],[142,-11],[146,-19],[153,-26],[150,-37],[140,-38],[132,-32],[115,-34]],
+ [[95,5],[105,-6],[115,-8],[125,-9],[134,-4],[141,-3],[141,-9],[150,-10],[145,-6],[130,-2],[120,1],[110,2],[100,4]],
+ [[130,31],[136,34],[141,36],[142,45],[140,42],[131,34]],
+ [[-6,50],[2,51],[-2,58],[-6,58],[-5,54]],
+ [[166,-46],[174,-41],[178,-38],[172,-35],[170,-44]]
+];
+function inPoly(x,y,p){let c=false;for(let i=0,j=p.length-1;i<p.length;j=i++){const[xi,yi]=p[i],[xj,yj]=p[j];if((yi>y)!==(yj>y)&&x<(xj-xi)*(y-yi)/(yj-yi)+xi)c=!c}return c}
+const proj=(lon,lat)=>[lon+180,75-lat];
+let DOTS="";
+for(let lat=72;lat>=-56;lat-=3)for(let lon=-177;lon<=180;lon+=3){if(LAND.some(p=>inPoly(lon,lat,p))){const[x,y]=proj(lon,lat);DOTS+=`<circle cx="${x}" cy="${y}" r="0.75"/>`}}
+const NS="http://www.w3.org/2000/svg";
+
+function drawHero(){
+  const svg=$("#heroMap");
+  let h=`<g fill="var(--map-dot)">${DOTS}</g>`;
+  const pts=HUBS.map(x=>proj(x.lon,x.lat));
+  // arcs from network centre of gravity (Atlantic) to hubs
+  const c=proj(-71,42);
+  h+=`<g fill="none" stroke="rgba(159,227,198,.35)" stroke-width=".35">`;
+  for(const[x,y]of pts){if(Math.hypot(x-c[0],y-c[1])<12)continue;const mx=(c[0]+x)/2,my=Math.min(c[1],y)-18;h+=`<path d="M${c[0]} ${c[1]} Q${mx} ${my} ${x} ${y}"/>`}
+  h+=`</g>`;
+  HUBS.forEach((x,i)=>{const[px,py]=pts[i];const col=TYPES[x.t].color;h+=`<circle class="pulse" cx="${px}" cy="${py}" r="1.6" fill="none" stroke="${col}" stroke-width=".5" style="animation-delay:${(i*0.21).toFixed(2)}s"/><circle cx="${px}" cy="${py}" r="1.3" fill="${col}"/>`});
+  svg.innerHTML=h;
 }
-function calcROI(){
-  const saffPrice=parseInt(document.getElementById('saff-slider').value);
-  const microCycles=parseInt(document.getElementById('micro-slider').value);
-  const directPct=parseInt(document.getElementById('direct-slider').value);
-  document.getElementById('saff-val').textContent='$'+saffPrice.toLocaleString()+'/lb';
-  document.getElementById('micro-val').textContent=microCycles+' cycles';
-  document.getElementById('direct-val').textContent=directPct+'% direct';
-  const saffRev=2.5*saffPrice;
-  const microRev=Math.round(microCycles*1200*(1+directPct*0.006));
-  const mushRev=22500*(1+directPct*0.004);
-  const herbRev=16000*(1+directPct*0.003);
-  const garlicRev=7500;
-  const otherRev=13200;
-  const gross=Math.round(saffRev+microRev+mushRev+herbRev+garlicRev+otherRev);
-  const net=Math.round(gross-23400);
-  const roi=Math.round(net/38300*100);
-  const payback=(38300/gross*12).toFixed(1);
-  document.getElementById('calc-rev').textContent='$'+gross.toLocaleString();
-  document.getElementById('calc-profit').textContent='$'+net.toLocaleString();
-  document.getElementById('calc-roi').textContent=roi+'%';
-  document.getElementById('calc-payback').textContent=payback+' mo';
+
+/* ---------- Shop ---------- */
+const cart={};let csa=false;
+function renderShop(){
+  const g=$("#shopGrid");g.innerHTML="";
+  for(const p of PRODUCTS){
+    const q=cart[p.id]||0;
+    g.append(el("article",{class:"prod"},
+      el("div",{class:"swatch",style:`background:${p.bg}`,text:p.tag}),
+      el("h3",{text:p.name}),
+      el("div",{},el("span",{class:"price",text:money(p.price)}),el("span",{class:"unit",text:"  per "+p.unit})),
+      el("p",{text:p.desc}),
+      el("div",{class:"qty"},
+        el("button",{type:"button","aria-label":"Remove one "+p.name,onclick:()=>{cart[p.id]=Math.max(0,q-1);updateCart()}, text:"−"}),
+        el("span",{text:String(q),"aria-live":"polite"}),
+        el("button",{type:"button","aria-label":"Add one "+p.name,onclick:()=>{cart[p.id]=q+1;updateCart()},text:"+"}))
+    ));
+  }
 }
+function cartItems(){return PRODUCTS.filter(p=>cart[p.id]>0).map(p=>({id:p.id,name:p.name,unit:p.unit,qty:cart[p.id],price:p.price}))}
+function cartTotal(){return cartItems().reduce((s,i)=>s+i.qty*i.price,0)+(csa?CSA_PRICE:0)}
+function updateCart(){
+  renderShop();
+  const items=cartItems();
+  $("#cartCount").textContent=items.reduce((s,i)=>s+i.qty,0)+(csa?1:0);
+  const L=$("#cartLines");L.innerHTML="";
+  if(!items.length&&!csa)L.append(el("p",{class:"muted",text:"Your basket is empty. Add something from the shop."}));
+  for(const i of items)L.append(el("div",{class:"cart-line"},el("span",{text:`${i.qty} × ${i.name} (${i.unit})`}),el("span",{text:money(i.qty*i.price)})));
+  if(csa)L.append(el("div",{class:"cart-line"},el("span",{text:"Weekly CSA box"}),el("span",{text:money(CSA_PRICE)+" / week"})));
+  $("#cartTotal").textContent=money(cartTotal());
+}
+$("#csaToggle").addEventListener("change",e=>{csa=e.target.checked;updateCart()});
+function openCart(o){$("#drawer").classList.toggle("open",o);$("#scrim").classList.toggle("open",o);$("#drawer").setAttribute("aria-hidden",String(!o));if(o)$("#closeCart").focus()}
+$("#cartBtn").onclick=()=>openCart(true);$("#closeCart").onclick=()=>openCart(false);$("#scrim").onclick=()=>openCart(false);
+addEventListener("keydown",e=>{if(e.key==="Escape")openCart(false)});
+
+/* ---------- Farm ---------- */
+let activeCrop="saffron";
+function renderCrops(){
+  const tabs=$("#cropTabs");tabs.innerHTML="";
+  for(const c of CROPS)tabs.append(el("button",{type:"button",role:"tab","aria-selected":String(c.id===activeCrop),onclick:()=>{activeCrop=c.id;renderCrops()},text:c.name}));
+  const c=CROPS.find(x=>x.id===activeCrop);
+  const net=c.costs.reduce((s,[,v])=>s+v,0);
+  const right=el("div");
+  for(const[k,v]of c.costs)right.append(el("div",{class:"kv"},el("span",{text:k}),el("span",{class:v<0?"neg":"pos",text:(v<0?"−":"+")+money(Math.abs(v))})));
+  right.append(el("div",{class:"kv"},el("span",{text:"Net, year 1"}),el("span",{class:"pos",text:money(net)})));
+  const chips=el("div",{class:"chips"});[c.area,...c.chips].forEach(t=>chips.append(el("span",{class:"chip",text:t})));
+  const p=$("#cropPanel");p.innerHTML="";
+  p.append(el("div",{class:"crop-body"},el("div",{},el("h3",{text:c.name}),el("p",{class:"muted",text:c.text}),chips),right));
+}
+function renderRoad(){const r=$("#road");for(const[m,t,d]of ROAD)r.append(el("li",{},el("div",{class:"m",text:m}),el("div",{},el("div",{style:"font-weight:600",text:t}),el("div",{class:"d",text:d}))))}
+function renderAlloc(){
+  const a=$("#alloc"),lg=$("#legend");
+  for(const[n,ac,c]of ALLOC){for(let i=0;i<ac/0.25;i++)a.append(el("div",{style:`background:${c}`}));lg.append(el("span",{style:`--c:${c}`,text:`${n}, ${ac} ac`}))}
+}
+let taskState={};let canEditTasks=false;let tasksDoc=null;
+function renderTasks(){
+  const box=$("#tasks");box.innerHTML="";
+  for(const t of DEFAULT_TASKS){
+    const done=!!taskState[t.id];
+    const cb=el("input",{type:"checkbox",id:"task-"+t.id});cb.checked=done;
+    cb.disabled=!!tasksDoc&&!canEditTasks;
+    cb.addEventListener("change",async()=>{
+      taskState={...taskState,[t.id]:cb.checked};renderTasks();
+      if(tasksDoc&&canEditTasks){try{await tasksDoc.set({done:taskState,updatedAt:Date.now()})}catch(e){$("#taskNote").textContent="Couldn’t save that change. Check your connection and try again."}}
+    });
+    box.append(el("div",{class:"task"+(done?" done":"")},cb,el("label",{for:"task-"+t.id},el("div",{class:"t",text:t.t}),el("div",{class:"when",text:`${t.when}. ${t.d}`}))));
+  }
+}
+
+/* ---------- Network ---------- */
+let members=[];const show=new Set(Object.keys(TYPES));let selected=null;
+function hash(s){let h=0;for(const ch of s)h=(h*31+ch.charCodeAt(0))|0;return h}
+function memberPoints(){return members.map(m=>{const c=COUNTRIES.find(x=>x[0]===m.country)||COUNTRIES[0];const h=hash(m.id);return{n:m.name,t:m.type,lon:c[1]+((h%100)/100)*3-1.5,lat:c[2]+(((h>>8)%100)/100)*3-1.5,p:`${m.city?m.city+", ":""}${m.country}. ${m.offer||""}`,member:true}})}
+function allPoints(){return[...HUBS,...memberPoints()]}
+function renderFilters(){
+  const f=$("#filters");f.innerHTML="";
+  for(const[k,v]of Object.entries(TYPES))f.append(el("button",{type:"button","aria-pressed":String(show.has(k)),onclick:()=>{show.has(k)?show.delete(k):show.add(k);renderNetwork()}},el("span",{style:`display:inline-block;width:9px;height:9px;border-radius:50%;background:${v.color};margin-right:8px`}),v.label));
+}
+function renderNetwork(){
+  renderFilters();
+  const svg=$("#netMap"),tip=$("#tip");
+  const pts=allPoints().filter(p=>show.has(p.t));
+  svg.innerHTML=`<g fill="var(--map-dot)">${DOTS}</g>`;
+  pts.forEach((p,i)=>{
+    const[x,y]=proj(p.lon,p.lat);const col=TYPES[p.t].color;const sel=selected===p.n;
+    const g=document.createElementNS(NS,"g");g.setAttribute("tabindex","0");g.setAttribute("role","button");g.setAttribute("aria-label",p.n);g.style.cursor="pointer";
+    g.innerHTML=`<circle cx="${x}" cy="${y}" r="5" fill="transparent"/>${sel?`<circle cx="${x}" cy="${y}" r="3.4" fill="none" stroke="#fff" stroke-width=".6"/>`:""}<circle cx="${x}" cy="${y}" r="${p.member?1.4:1.8}" fill="${col}" stroke="#06211C" stroke-width=".3"/>`;
+    const showTip=()=>{const r=svg.getBoundingClientRect(),pr=svg.parentElement.getBoundingClientRect();tip.style.display="block";tip.innerHTML="";tip.append(el("div",{style:"font-weight:700",text:p.n}),el("div",{class:"muted",text:p.p}));const left=r.left-pr.left+x/360*r.width,top=r.top-pr.top+y/135*r.height;tip.style.left=Math.min(left+10,pr.width-250)+"px";tip.style.top=(top+10)+"px"};
+    g.addEventListener("mouseenter",showTip);g.addEventListener("focus",showTip);
+    g.addEventListener("mouseleave",()=>tip.style.display="none");g.addEventListener("blur",()=>tip.style.display="none");
+    g.addEventListener("click",()=>{selected=p.n;renderNetwork()});
+    g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();selected=p.n;renderNetwork()}});
+    svg.append(g);
+  });
+  const list=$("#hubList");list.innerHTML="";
+  const sorted=[...pts].sort((a,b)=>(b.n===selected)-(a.n===selected));
+  for(const p of sorted)list.append(el("button",{type:"button",class:"hub"+(p.n===selected?" sel":""),onclick:()=>{selected=p.n;renderNetwork()}},el("div",{class:"k",style:`color:${TYPES[p.t].color==="#9FE3C6"?"var(--leaf)":"var(--ink-2)"}`,text:TYPES[p.t].label}),el("div",{class:"n",text:p.n}),el("div",{class:"p",text:p.p})));
+  if(!pts.length)list.append(el("p",{class:"muted",text:"Turn on a category above to see places on the map."}));
+  $("#hubCount").textContent=HUBS.length;$("#memberCount").textContent=members.length;
+}
+COUNTRIES.forEach(([n])=>$("#jCountry").append(el("option",{value:n,text:n})));
+
+/* ---------- Investors ---------- */
+const STARTUP=[["Land lease, year 1",6000],["Saffron corms",3000],["Microgreens greenhouse",5000],["Mushroom room",5500],["Herb transplants and seeds",1800],["Irrigation",4000],["Soil prep and equipment",5000],["Tools, storage, fencing",4000],["Permits and insurance",2000],["Marketing and website",2000]];
+const STARTUP_TOTAL=STARTUP.reduce((s,[,v])=>s+v,0); // 38,300
+const OPEX=23400;
+function renderInvestorsStatic(){
+  const s=$("#startup");
+  for(const[k,v]of STARTUP)s.append(el("div",{class:"kv"},el("span",{text:k}),el("span",{text:money(v)})));
+  s.append(el("div",{class:"kv"},el("span",{text:"Total"}),el("span",{text:money(STARTUP_TOTAL)})));
+}
+function streams(saff,cycles,direct){
+  return[
+    ["Microgreens",Math.round(cycles*1455*(1+(direct-50)*0.006)),"#3B7A1E"],
+    ["Mushrooms",22500*(1+(direct-50)*0.004),"#5E6B66"],
+    ["Saffron",2.5*saff,"#6E4FA3"],
+    ["Herbs",16000*(1+(direct-50)*0.003),"#8C7BC2"],
+    ["CSA boxes",9600,"#D9961A"],
+    ["Garlic",7500,"#B9A27A"],
+    ["Tours and workshops",3600,"#12806A"]
+  ];
+}
+function calc(){
+  const saff=+$("#sSaff").value,cyc=+$("#sMicro").value,dir=+$("#sDirect").value;
+  $("#oSaff").textContent=money(saff)+" per lb";$("#oMicro").textContent=cyc+" cycles";$("#oDirect").textContent=dir+"% direct";
+  const st=streams(saff,cyc,dir);const rev=st.reduce((s,x)=>s+x[1],0);const profit=rev-OPEX;
+  $("#cRev").textContent=money(rev);$("#cProfit").textContent=money(profit);
+  $("#cRoi").textContent=Math.round(profit/STARTUP_TOTAL*100)+"%";
+  $("#cPay").textContent=profit>0?(STARTUP_TOTAL/(profit/12)).toFixed(1)+" mo":"Not reached";
+  const b=$("#bars");b.innerHTML="";const max=Math.max(...st.map(x=>x[1]));
+  for(const[n,v,c]of st)b.append(el("div",{class:"bar"},el("span",{text:n}),el("div",{class:"track"},el("div",{class:"fill",style:`width:${v/max*100}%;background:${c}`})),el("span",{class:"amt",text:"$"+(v/1000).toFixed(1)+"K"})));
+}
+["#sSaff","#sMicro","#sDirect"].forEach(s=>$(s).addEventListener("input",calc));
+
+/* ---------- Connected features ---------- */
+let db=null,user=null,myId=null,isAdmin=false,ordersUnsub=null;
+async function connect(){
+  try{[db,user]=await Promise.all([window.claude?.use?.("db")??null,window.claude?.use?.("user")??null])}catch(e){db=null}
+  if(!db||!user){
+    $("#placeOrder").textContent="Email order request";
+    note($("#orderNote"),"This opens your email app with the order filled in.","");
+    $("#jSave").textContent="Email my details";
+    note($("#jNote"),"We add your pin after we receive your details.","");
+    $("#taskNote").textContent="Ticks stay on this device only.";
+    return;
+  }
+  try{myId=await user.id()}catch(e){myId=null}
+  try{isAdmin=await user.canEdit()}catch(e){isAdmin=false}
+  canEditTasks=isAdmin;
+
+  // Tasks
+  tasksDoc=db.doc("ops/tasks");
+  $("#taskNote").textContent=canEditTasks?"Shared with your team. Ticks save for everyone.":"Read-only view of the team’s progress.";
+  tasksDoc.onSnapshot(s=>{taskState=(s.exists&&s.data().done)||{};renderTasks()},()=>{});
+
+  // Network members
+  db.collection("network").onSnapshot(s=>{
+    members=s.docs.map(d=>({id:d.id,...d.data()})).filter(m=>m.name&&TYPES[m.type]);
+    const mine=members.find(m=>m.id===myId);
+    if(mine){$("#jName").value=mine.name;$("#jType").value=mine.type;$("#jCity").value=mine.city||"";$("#jCountry").value=mine.country;$("#jOffer").value=mine.offer||"";$("#jSave").textContent="Update my pin";$("#jRemove").style.display="inline-flex";$("#joinTitle").textContent="Your pin on the map"}
+    else{$("#jSave").textContent="Add my pin";$("#jRemove").style.display="none"}
+    renderNetwork();
+  },()=>{});
+
+  // My order
+  if(myId){
+    db.doc("orders/"+myId).onSnapshot(s=>{
+      const p=$("#myOrderPanel"),b=$("#myOrder");
+      if(!s.exists){p.style.display="none";return}
+      const o=s.data();p.style.display="block";b.innerHTML="";
+      b.append(el("p",{style:"margin:0 0 8px"},el("span",{class:"status "+o.status,text:statusLabel(o.status)}),el("span",{class:"muted small",text:"  Sent "+new Date(o.createdAt).toLocaleString()})));
+      b.append(el("p",{class:"muted",style:"margin:0",text:orderSummary(o)}));
+    },()=>{});
+  }
+
+  // Admin: incoming orders
+  if(isAdmin){
+    $("#adminOrders").style.display="block";
+    ordersUnsub=db.collection("orders").orderBy("createdAt","desc").limit(50).onSnapshot(s=>{
+      const L=$("#orderList");L.innerHTML="";
+      if(s.empty){L.append(el("p",{class:"muted",text:"No orders yet. Share this page with buyers to start receiving them."}));return}
+      for(const d of s.docs){
+        const o=d.data();
+        const sel=el("select",{class:"in","aria-label":"Order status",style:"width:auto"});
+        ["requested","confirmed","fulfilled"].forEach(v=>{const op=el("option",{value:v,text:statusLabel(v)});if(v===o.status)op.selected=true;sel.append(op)});
+        sel.addEventListener("change",async()=>{try{await db.doc("orders/"+d.id).update({status:sel.value})}catch(e){sel.value=o.status}});
+        L.append(el("div",{class:"order"},el("div",{},el("div",{style:"font-weight:700",text:`${o.name||"Unnamed"} · ${money(o.total||0)}`}),el("div",{class:"muted small",text:`${o.contact||"No contact"}. ${o.how||""}. ${new Date(o.createdAt).toLocaleString()}`}),el("div",{class:"small",text:orderSummary(o)})),sel));
+      }
+    },()=>{});
+  }
+}
+function statusLabel(s){return{requested:"Requested",confirmed:"Confirmed",fulfilled:"Fulfilled"}[s]||"Requested"}
+function orderSummary(o){const parts=(o.items||[]).map(i=>`${i.qty} × ${i.name}`);if(o.csa)parts.push("Weekly CSA box");return parts.join(", ")||"No items"}
+
+$("#placeOrder").addEventListener("click",async()=>{
+  const n=$("#orderNote");const items=cartItems();
+  if(!items.length&&!csa)return note(n,"Add at least one item or the CSA box first.","err");
+  if(!$("#oName").value.trim()||!$("#oContact").value.trim())return note(n,"Add your name and a phone number or email so we can confirm.","err");
+  if(!db||!myId){
+    const lines=items.map(i=>`${i.qty} x ${i.name} (${i.unit}) - ${money(i.qty*i.price)}`);if(csa)lines.push("Weekly CSA box - $35/week");
+    const body=`Order request\n\n${lines.join("\n")}\n\nTotal: ${money(cartTotal())}\nName: ${$("#oName").value.trim()}\nContact: ${$("#oContact").value.trim()}\nPickup or delivery: ${$("#oHow").value}`;
+    location.href=`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("BioAcreon order request")}&body=${encodeURIComponent(body)}`;
+    return note(n,"Your email app should open with the order. Press send to finish.","ok");
+  }
+  const btn=$("#placeOrder");btn.disabled=true;
+  try{
+    await db.doc("orders/"+myId).set({items,csa,total:cartTotal(),name:$("#oName").value.trim(),contact:$("#oContact").value.trim(),how:$("#oHow").value,status:"requested",createdAt:Date.now()});
+    for(const k in cart)cart[k]=0;csa=false;$("#csaToggle").checked=false;updateCart();
+    note(n,"Order request sent. We’ll confirm availability within a day.","ok");
+  }catch(e){note(n,"The order didn’t send. Check your connection and try again.","err")}
+  btn.disabled=false;
+});
+
+$("#jSave").addEventListener("click",async()=>{
+  const n=$("#jNote");const name=$("#jName").value.trim();
+  if(!name)return note(n,"Add the name of your farm or business.","err");
+  if(!db||!myId){
+    const body=`Please add me to the BioAcreon network.\n\nName: ${name}\nType: ${$("#jType").value}\nCity: ${$("#jCity").value.trim()}\nCountry: ${$("#jCountry").value}\nOffer: ${$("#jOffer").value.trim()}`;
+    location.href=`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("Join the BioAcreon network")}&body=${encodeURIComponent(body)}`;
+    return note(n,"Your email app should open with your details. Press send to finish.","ok");
+  }
+  try{await db.doc("network/"+myId).set({name,type:$("#jType").value,city:$("#jCity").value.trim(),country:$("#jCountry").value,offer:$("#jOffer").value.trim(),updatedAt:Date.now()});note(n,"Your pin is on the map.","ok");selected=name}
+  catch(e){note(n,"Your pin didn’t save. You may only have view access to this page.","err")}
+});
+$("#jRemove").addEventListener("click",async()=>{
+  try{await db.doc("network/"+myId).delete();note($("#jNote"),"Your pin was removed.","ok");$("#joinTitle").textContent="Put your farm or business on the map"}catch(e){note($("#jNote"),"Couldn’t remove the pin. Try again.","err")}
+});
+
+/* ---------- Agronomist (sample) ---------- */
+let sample=null,askCtl=null;
+(async()=>{try{sample=await window.claude?.use?.("sample")}catch(e){sample=null}
+  if(!sample){$("#askBtn").disabled=true;$("#askIn").disabled=true;$("#askOut").textContent="The agronomist works in the live app. Use “Open the live app” on the Get the app page."}})();
+async function ask(){
+  const q=$("#askIn").value.trim();if(!q||!sample)return;
+  askCtl?.abort();askCtl=new AbortController();
+  const out=$("#askOut");out.textContent="Thinking…";$("#askBtn").disabled=true;
+  const ctx=`You are a practical agronomist advising BioAcreon, a 2-acre specialty farm. Crops and plan: ${CROPS.map(c=>`${c.name} (${c.area}): ${c.text}`).join(" ")} Roadmap: ${ROAD.map(r=>r.join(": ")).join("; ")}. Year-1 plan: revenue about $110K, operating costs $23.4K, startup $38.3K.
+Answer in plain English, under 180 words, with concrete steps. If the answer depends on the farm's climate or location, say what to check. No markdown headings.
+
+Question: ${q}`;
+  try{const r=await sample(ctx,{signal:askCtl.signal,cache:false,onText:({text})=>{out.textContent=text}});out.textContent=r.text}
+  catch(e){if(e?.code==="not_granted"){out.textContent="The agronomist needs permission to run. Allow it from the artifact’s permissions to use it."}else if(e?.code==="rate_limited"){out.textContent="Too many questions in a short time. Wait a minute and ask again."}else if(e?.name!=="AbortError"){out.textContent="No answer came back. Try asking again."}}
+  $("#askBtn").disabled=false;
+}
+$("#askBtn").addEventListener("click",ask);
+$("#askIn").addEventListener("keydown",e=>{if(e.key==="Enter")ask()});
+
+/* ---------- Init ---------- */
+$("#liveLink").href=LIVE_APP_URL;
+drawHero();renderShop();updateCart();renderCrops();renderRoad();renderAlloc();renderTasks();renderNetwork();renderInvestorsStatic();calc();route();
+connect();
 </script>
+</body>
+</html>
